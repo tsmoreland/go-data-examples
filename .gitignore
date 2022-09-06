@@ -15,3 +15,6 @@
 # vendor/
 
 settings.json
+
+# Intellij folder (or Goland)
+.idea/
