@@ -12,6 +12,7 @@ type appConfigurationBuilder struct {
 	address  string
 	username string
 	password string
+	secret   string
 }
 
 func NewBuilder() Builder {
@@ -30,6 +31,7 @@ func (b *appConfigurationBuilder) AddJsonFile(filename string) Builder {
 	b.address = config.Address
 	b.username = config.Username
 	b.password = config.Password
+	b.secret = config.SecretId
 
 	return b
 }
@@ -49,6 +51,9 @@ func (b *appConfigurationBuilder) AddEnvironment() Builder {
 	if config.Password != nil {
 		b.password = *config.Password
 	}
+	if config.SecretId != nil {
+		b.secret = *config.SecretId
+	}
 
 	return b
 }
@@ -57,6 +62,23 @@ func (b *appConfigurationBuilder) AddUserSecrets() Builder {
 	if b.err != nil {
 		return b
 	}
+
+	config, err := newSecretConfiguration(b.secret)
+	if err != nil {
+		// ignore error, secret is optional
+		return b
+	} else {
+		if config.Address != "" {
+			b.address = config.Address
+		}
+		if config.Username != "" {
+			b.username = config.Username
+		}
+		if config.Password != "" {
+			b.password = config.Password
+		}
+	}
+
 	return b
 }
 

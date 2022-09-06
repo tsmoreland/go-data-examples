@@ -9,6 +9,7 @@ type jsonConfiguration struct {
 	Address  string `json:"address"`
 	Username string `json:"username"`
 	Password string `json:"password"`
+	SecretId string `json:"secret"`
 }
 
 func newJsonConfiguration(filename string) (*jsonConfiguration, error) {
