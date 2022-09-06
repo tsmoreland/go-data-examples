@@ -33,7 +33,12 @@ func main() {
 		log.Fatal(err)
 	}
 
-	defer db.Close()
+	defer func() {
+		err := db.Close()
+		if err != nil {
+			log.Println(err)
+		}
+	}()
 
 	err = db.Ping()
 	if err != nil {
