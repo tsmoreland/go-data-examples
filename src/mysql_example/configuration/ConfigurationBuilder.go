@@ -19,14 +19,44 @@ func NewBuilder() Builder {
 }
 
 func (b *appConfigurationBuilder) AddJsonFile(filename string) Builder {
+	if b.err != nil {
+		return b
+	}
+
+	config, err := newJsonConfiguration(filename)
+	if err != nil {
+		b.err = err
+	}
+	b.address = config.Address
+	b.username = config.Username
+	b.password = config.Password
 
 	return b
 }
 func (b *appConfigurationBuilder) AddEnvironment() Builder {
+	if b.err != nil {
+		return b
+	}
+
+	config := newEnvironmentConfig()
+
+	if config.Address != nil {
+		b.address = *config.Address
+	}
+	if config.Username != nil {
+		b.username = *config.Username
+	}
+	if config.Password != nil {
+		b.password = *config.Password
+	}
+
 	return b
 }
 
 func (b *appConfigurationBuilder) AddUserSecrets() Builder {
+	if b.err != nil {
+		return b
+	}
 	return b
 }
 
