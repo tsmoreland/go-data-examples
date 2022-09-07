@@ -45,5 +45,8 @@ func main() {
 		log.Fatal(err)
 	}
 
+	// for use with transactions
+	//ctx := context.Background()
+
 	fmt.Println("Connected")
 }
