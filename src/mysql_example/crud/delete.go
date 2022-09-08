@@ -3,7 +3,7 @@ package crud
 import "database/sql"
 
 func DeleteById(db *sql.DB, id int64) (int64, error) {
-	result, err := db.Exec("DELETE FROM people WHERE id = ?", id)
+	result, err := db.Exec("DELETE FROM People WHERE id = ?", id)
 	if err != nil {
 		return 0, nil
 	}
