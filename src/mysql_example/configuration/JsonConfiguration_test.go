@@ -17,7 +17,7 @@ const (
 )
 
 func Test_newJsonConfiguration_ReturnsError_WhenReadFileReturnsError(t *testing.T) {
-	filename, err := arrangeFile(false, t)
+	filename, err := arrangeFile(false, false, t)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -28,20 +28,42 @@ func Test_newJsonConfiguration_ReturnsError_WhenReadFileReturnsError(t *testing.
 	}
 }
 
-func arrangeFile(ensureExists bool, t *testing.T) (string, error) {
+func Test_newJsonConfiguration_ReturnsError_WhenFileMalformed(t *testing.T) {
+	filename, err := arrangeFile(true, false, t)
+	if err != nil {
+		t.Fatal(err)
+	}
 
+	_, err = newJsonConfiguration(filename)
+	if err == nil {
+		t.Fatal("newJsonConfiguration did not return expected error")
+	}
+}
+
+func Test_newJsonConfiguration_DoesNotReturnError_WhenFileIsWellformed(t *testing.T) {
+	filename, err := arrangeFile(true, true, t)
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, err = newJsonConfiguration(filename)
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
+func arrangeFile(ensureExists bool, isValid bool, t *testing.T) (string, error) {
 	tempDir := t.TempDir()
 	filename := filepath.Join(tempDir, "appsettings.test.json")
 
 	_, err := os.Stat(filename)
 	if ensureExists {
-		return getFilepathWhenFileMustExist(filename, err)
+		return getFilepathWhenFileMustExist(filename, isValid, err)
 	} else {
 		return getFilepathWhenFileMustNotExist(filename, err)
 	}
 }
 
-func getFilepathWhenFileMustExist(filename string, statError error) (string, error) {
+func getFilepathWhenFileMustNotExist(filename string, statError error) (string, error) {
 	if errors.Is(statError, fs.ErrNotExist) {
 		return filename, nil
 	} else {
@@ -49,22 +71,32 @@ func getFilepathWhenFileMustExist(filename string, statError error) (string, err
 		return filename, err
 	}
 }
-func getFilepathWhenFileMustNotExist(filename string, statError error) (string, error) {
+func getFilepathWhenFileMustExist(filename string, isValid bool, statError error) (string, error) {
 	if errors.Is(statError, fs.ErrNotExist) {
-		return createFile(filename)
+		return createFile(filename, isValid)
 	} else {
 		return filename, nil // assuming it has correct format
 	}
 }
 
-func createFile(filename string) (string, error) {
-	json := fmt.Sprintf(`{
+func createFile(filename string, isValid bool) (string, error) {
+	var content string
+	if isValid {
+		content = fmt.Sprintf(`{
   "address": "%v",
   "username": "%v",
   "password": "%v",
-  "secretId": "%v",
+  "secretId": "%v"
 }`, expectedAddress, expectedUsername, expectedPassword, expectedSecretId)
+	} else {
+		content = fmt.Sprintf(`settings:
+  address: %v
+  username: %v
+  password: %v
+  secretId: %v	
+`, expectedAddress, expectedUsername, expectedPassword, expectedSecretId)
+	}
 
-	err := os.WriteFile(filename, []byte(json), 0600)
+	err := os.WriteFile(filename, []byte(content), 0600)
 	return filename, err
 }
