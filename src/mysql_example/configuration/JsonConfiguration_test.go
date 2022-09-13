@@ -40,7 +40,7 @@ func Test_newJsonConfiguration_ReturnsError_WhenFileMalformed(t *testing.T) {
 	}
 }
 
-func Test_newJsonConfiguration_DoesNotReturnError_WhenFileIsWellformed(t *testing.T) {
+func Test_newJsonConfiguration_DoesNotReturnError_WhenFileIsWellFormed(t *testing.T) {
 	filename, err := arrangeFile(true, true, t)
 	if err != nil {
 		t.Fatal(err)
@@ -48,6 +48,30 @@ func Test_newJsonConfiguration_DoesNotReturnError_WhenFileIsWellformed(t *testin
 	_, err = newJsonConfiguration(filename)
 	if err != nil {
 		t.Fatal(err)
+	}
+}
+
+func Test_newJsonConfiguration_ReturnsExpectedConfig_WhenFileIsWellFormed(t *testing.T) {
+	filename, err := arrangeFile(true, true, t)
+	if err != nil {
+		t.Fatal(err)
+	}
+	c, err := newJsonConfiguration(filename)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if c.Address != expectedAddress {
+		t.Fatalf("Address %v does not match expected value", c.Address)
+	}
+	if c.Username != expectedUsername {
+		t.Fatalf("Username %v does not match expected value", c.Username)
+	}
+	if c.Password != expectedPassword {
+		t.Fatalf("Password %v does not match expected value", c.Password)
+	}
+	if c.SecretId != expectedSecretId {
+		t.Fatalf("SecretId %v does not match expected value", c.SecretId)
 	}
 }
 
@@ -86,14 +110,14 @@ func createFile(filename string, isValid bool) (string, error) {
   "address": "%v",
   "username": "%v",
   "password": "%v",
-  "secretId": "%v"
+  "secret": "%v"
 }`, expectedAddress, expectedUsername, expectedPassword, expectedSecretId)
 	} else {
 		content = fmt.Sprintf(`settings:
   address: %v
   username: %v
   password: %v
-  secretId: %v	
+  secret: %v	
 `, expectedAddress, expectedUsername, expectedPassword, expectedSecretId)
 	}
 
