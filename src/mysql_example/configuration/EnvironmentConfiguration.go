@@ -2,6 +2,13 @@ package configuration
 
 import "os"
 
+const (
+	envAddressKey  = "GO_MYSQL_EXAMPLE__ADDRESS"
+	envUsernameKey = "GO_MYSQL_EXAMPLE__USERNAME"
+	envPasswordKey = "GO_MYSQL_EXAMPLE__PASSWORD"
+	envSecretIdKey = "GO_MYSQL_EXAMPLE__SECRET_ID"
+)
+
 type envConfiguration struct {
 	Address  *string
 	Username *string
@@ -10,10 +17,10 @@ type envConfiguration struct {
 }
 
 func newEnvironmentConfig() *envConfiguration {
-	address := getValueOrNilFromEnv("GO_MYSQL_EXAMPLE__ADDRESS")
-	username := getValueOrNilFromEnv("GO_MYSQL_EXAMPLE__USERNAME")
-	password := getValueOrNilFromEnv("GO_MYSQL_EXAMPLE__PASSWORD")
-	secret := getValueOrNilFromEnv("GO_MYSQL_EXAMPLE_SECRET_ID")
+	address := getValueOrNilFromEnv(envAddressKey)
+	username := getValueOrNilFromEnv(envUsernameKey)
+	password := getValueOrNilFromEnv(envPasswordKey)
+	secret := getValueOrNilFromEnv(envSecretIdKey)
 
 	return &envConfiguration{
 		Address:  address,
