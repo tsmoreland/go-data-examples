@@ -4,7 +4,7 @@ package configuration
 
 func getSecretHome(secretId string) (string, error) {
 	if secretId == "" {
-		return nil, fmt.Errorf("secret id cannot be empty")
+		return "", fmt.Errorf("secret id cannot be empty")
 	}
 
 	home, present := os.LookupEnv("Home")
