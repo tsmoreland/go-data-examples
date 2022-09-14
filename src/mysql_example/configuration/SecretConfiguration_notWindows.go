@@ -2,6 +2,11 @@
 
 package configuration
 
+import (
+	"fmt"
+	"os"
+)
+
 func getSecretHome(secretId string) (string, error) {
 	if secretId == "" {
 		return "", fmt.Errorf("secret id cannot be empty")
