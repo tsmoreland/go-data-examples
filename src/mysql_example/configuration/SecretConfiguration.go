@@ -9,11 +9,7 @@ import (
 
 func newSecretConfiguration(secretId string) (*jsonConfiguration, error) {
 
-	if secretId == "" {
-		return nil, fmt.Errorf("secret id cannot be empty")
-	}
-
-	home, err := getHomeOrUserProfileOrError()
+	home, err := getSecretHome(secretId)
 	if err != nil {
 		return nil, err
 	}
@@ -31,16 +27,6 @@ func newSecretConfiguration(secretId string) (*jsonConfiguration, error) {
 		// error might exist, need to review err for more details which we won't do yet
 		return nil, err
 	}
-}
-
-func getHomeOrUserProfileOrError() (string, error) {
-	home, present := os.LookupEnv("UserProfile")
-	if !present {
-		if home, present = os.LookupEnv("Home"); !present {
-			return "", fmt.Errorf("neither userprofile nor home directory found")
-		}
-	}
-	return home, nil
 }
 
 func ensureHomeOrUserProfileExistsAndIsDirectory(home string) error {
