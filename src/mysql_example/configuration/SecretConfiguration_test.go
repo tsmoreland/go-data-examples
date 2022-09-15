@@ -55,7 +55,8 @@ func Test_newSecretConfigurationShouldNotReturnErrorWhenFileExistsAndValid(t *te
 func arrangeSecretFile(t *testing.T, exists bool, isValid bool) (string, string, error) {
 	home := t.TempDir()
 	t.Setenv(secretHomeEnvVariable, home)
-	filename := filepath.Join(home, ".go", "secrets", expectedSecretId, "secret.json")
+	home = filepath.Join(home, ".go", "secrets", expectedSecretId)
+	filename := filepath.Join(home, "secret.json")
 
 	_, err := os.Stat(filename)
 	if !exists {
@@ -69,7 +70,9 @@ func arrangeSecretFile(t *testing.T, exists bool, isValid bool) (string, string,
 
 	fi, err := os.Stat(home)
 	if os.IsNotExist(err) {
-		os.MkdirAll(home, 0700)
+		if err := os.MkdirAll(home, 0700); err != nil {
+			t.Fatal(err)
+		}
 	} else if !fi.IsDir() {
 		t.Fatalf("%v is not a directory", home)
 	}
