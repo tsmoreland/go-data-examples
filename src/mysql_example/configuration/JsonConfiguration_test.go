@@ -17,7 +17,7 @@ const (
 )
 
 func Test_newJsonConfiguration_ReturnsError_WhenReadFileReturnsError(t *testing.T) {
-	filename, err := arrangeFile(false, false, t)
+	filename, err := arrangeTestJsonFile(false, false, t)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -29,7 +29,7 @@ func Test_newJsonConfiguration_ReturnsError_WhenReadFileReturnsError(t *testing.
 }
 
 func Test_newJsonConfiguration_ReturnsError_WhenFileMalformed(t *testing.T) {
-	filename, err := arrangeFile(true, false, t)
+	filename, err := arrangeTestJsonFile(true, false, t)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -41,7 +41,7 @@ func Test_newJsonConfiguration_ReturnsError_WhenFileMalformed(t *testing.T) {
 }
 
 func Test_newJsonConfiguration_DoesNotReturnError_WhenFileIsWellFormed(t *testing.T) {
-	filename, err := arrangeFile(true, true, t)
+	filename, err := arrangeTestJsonFile(true, true, t)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -52,7 +52,7 @@ func Test_newJsonConfiguration_DoesNotReturnError_WhenFileIsWellFormed(t *testin
 }
 
 func Test_newJsonConfiguration_ReturnsExpectedConfig_WhenFileIsWellFormed(t *testing.T) {
-	filename, err := arrangeFile(true, true, t)
+	filename, err := arrangeTestJsonFile(true, true, t)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -75,7 +75,7 @@ func Test_newJsonConfiguration_ReturnsExpectedConfig_WhenFileIsWellFormed(t *tes
 	}
 }
 
-func arrangeFile(ensureExists bool, isValid bool, t *testing.T) (string, error) {
+func arrangeTestJsonFile(ensureExists bool, isValid bool, t *testing.T) (string, error) {
 	tempDir := t.TempDir()
 	filename := filepath.Join(tempDir, "appsettings.test.json")
 
@@ -97,13 +97,13 @@ func getFilepathWhenFileMustNotExist(filename string, statError error) (string, 
 }
 func getFilepathWhenFileMustExist(filename string, isValid bool, statError error) (string, error) {
 	if errors.Is(statError, fs.ErrNotExist) {
-		return createFile(filename, isValid)
+		return createTestJsonFile(filename, isValid)
 	} else {
 		return filename, nil // assuming it has correct format
 	}
 }
 
-func createFile(filename string, isValid bool) (string, error) {
+func createTestJsonFile(filename string, isValid bool) (string, error) {
 	var content string
 	if isValid {
 		content = fmt.Sprintf(`{
