@@ -23,3 +23,6 @@ settings.json
 .dccache
 .vscode/
 .vs/
+
+# log files
+*.log
