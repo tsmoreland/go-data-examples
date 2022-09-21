@@ -2,16 +2,18 @@ package configuration
 
 type AppConfiguration interface {
 	Address() string
+	DatabaseName() string
 	Username() string
 	Password() string
 	SecretId() string
 }
 
 type readonlyConfiguration struct {
-	address  string
-	username string
-	password string
-	secretId string
+	address      string
+	username     string
+	password     string
+	databaseName string
+	secretId     string
 }
 
 func newConfiguration(
@@ -29,6 +31,10 @@ func newConfiguration(
 
 func (c readonlyConfiguration) Address() string {
 	return c.address
+}
+
+func (c readonlyConfiguration) DatabaseName() string {
+	return c.databaseName
 }
 
 func (c readonlyConfiguration) Username() string {
