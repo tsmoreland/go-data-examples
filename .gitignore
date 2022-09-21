@@ -18,3 +18,8 @@ settings.json
 
 # Intellij folder (or Goland)
 .idea/
+
+# Visual Studio and vs code
+.dccache/
+.vscode/
+.vs/
