@@ -8,11 +8,12 @@ type Builder interface {
 }
 
 type appConfigurationBuilder struct {
-	err      error
-	address  string
-	username string
-	password string
-	secret   string
+	err          error
+	address      string
+	databaseName string
+	username     string
+	password     string
+	secret       string
 }
 
 func NewBuilder() Builder {
@@ -29,6 +30,7 @@ func (b *appConfigurationBuilder) AddJsonFile(filename string) Builder {
 		b.err = err
 	}
 	b.address = config.Address
+	b.databaseName = config.DatabaseName
 	b.username = config.Username
 	b.password = config.Password
 	b.secret = config.SecretId
