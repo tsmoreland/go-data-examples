@@ -20,6 +20,6 @@ settings.json
 .idea/
 
 # Visual Studio and vs code
-.dccache/
+.dccache
 .vscode/
 .vs/
