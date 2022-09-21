@@ -10,10 +10,11 @@ import (
 )
 
 const (
-	expectedAddress  = "https://example.com:6033"
-	expectedUsername = "alpha"
-	expectedPassword = "bravo"
-	expectedSecretId = "68241e2f-e70b-4201-b252-ac8668ba0dd0"
+	expectedAddress      = "https://example.com:6033"
+	expectedDatabaseName = "phi"
+	expectedUsername     = "alpha"
+	expectedPassword     = "bravo"
+	expectedSecretId     = "68241e2f-e70b-4201-b252-ac8668ba0dd0"
 )
 
 func Test_newJsonConfiguration_ReturnsError_WhenReadFileReturnsError(t *testing.T) {
@@ -67,6 +68,9 @@ func Test_newJsonConfiguration_ReturnsExpectedConfig_WhenFileIsWellFormed(t *tes
 	if c.Username != expectedUsername {
 		t.Fatalf("Username %v does not match expected value", c.Username)
 	}
+	if c.DatabaseName != expectedDatabaseName {
+		t.Fatalf("Database Name %v does not match expected value", c.DatabaseName)
+	}
 	if c.Password != expectedPassword {
 		t.Fatalf("Password %v does not match expected value", c.Password)
 	}
@@ -108,10 +112,11 @@ func createTestJsonFile(filename string, isValid bool) (string, error) {
 	if isValid {
 		content = fmt.Sprintf(`{
   "address": "%v",
+  "database_name": "%v",
   "username": "%v",
   "password": "%v",
   "secret": "%v"
-}`, expectedAddress, expectedUsername, expectedPassword, expectedSecretId)
+}`, expectedAddress, expectedDatabaseName, expectedUsername, expectedPassword, expectedSecretId)
 	} else {
 		content = fmt.Sprintf(`settings:
   address: %v

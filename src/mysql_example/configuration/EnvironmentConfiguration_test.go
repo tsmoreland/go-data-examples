@@ -35,6 +35,16 @@ func Test_newEnvironmentConfigShouldReturnNilPasswordWhenEnvironmentVariableNotS
 	}
 }
 
+func Test_newEnvironmentConfigShouldReturnNilDatabaseNameWhenEnvironmentVariableNotSet(t *testing.T) {
+	if _, present := os.LookupEnv(envDatabaseNameKey); present {
+		t.Skipf("Passwords already defined")
+	}
+	c := newEnvironmentConfig()
+	if c.DatabaseName != nil {
+		t.Fatalf("Password is not nil")
+	}
+}
+
 func Test_newEnvironmentConfigShouldReturnNilSecretIdWhenEnvironmentVariableNotSet(t *testing.T) {
 	if _, present := os.LookupEnv(envSecretIdKey); present {
 		t.Skipf("SecretIds already defined")
@@ -54,6 +64,18 @@ func Test_newEnvironmentConfigShouldReturnExpectedValueAddressWhenEnvironmentVar
 	}
 	if *c.Address != expectedAddress {
 		t.Fatalf("Address %v does not match expected value", c.Address)
+	}
+}
+
+func Test_newEnvironmentConfigShouldReturnExpectedValueDatabaseNameWhenEnvironmentVariableSet(t *testing.T) {
+	t.Setenv(envDatabaseNameKey, expectedDatabaseName)
+
+	c := newEnvironmentConfig()
+	if c.DatabaseName == nil {
+		t.Fatalf("Password not found")
+	}
+	if *c.DatabaseName != expectedDatabaseName {
+		t.Fatalf("Password %v does not match expected value", c.Password)
 	}
 }
 

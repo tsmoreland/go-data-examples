@@ -26,7 +26,7 @@ func main() {
 		Passwd: config.Password(),
 		Net:    "tcp",
 		Addr:   config.Address(),
-		DBName: "go_mysql_example",
+		DBName: config.DatabaseName(),
 	}
 	db, err = sql.Open("mysql", dsn.FormatDSN())
 	if err != nil {
