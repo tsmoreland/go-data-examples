@@ -89,6 +89,6 @@ func (b *appConfigurationBuilder) Build() (AppConfiguration, error) {
 		return nil, b.err
 	}
 
-	config := newConfiguration(b.address, b.username, b.password)
+	config := newConfiguration(b.address, b.databaseName, b.username, b.password)
 	return config, nil
 }
