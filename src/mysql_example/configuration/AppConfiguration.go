@@ -18,14 +18,16 @@ type readonlyConfiguration struct {
 
 func newConfiguration(
 	address string,
+	databaseName string,
 	username string,
 	password string) *readonlyConfiguration {
 
 	return &readonlyConfiguration{
-		address:  address,
-		username: username,
-		password: password,
-		secretId: "",
+		address:      address,
+		databaseName: databaseName,
+		username:     username,
+		password:     password,
+		secretId:     "",
 	}
 }
 
