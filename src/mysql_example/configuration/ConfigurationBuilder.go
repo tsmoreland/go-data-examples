@@ -28,6 +28,7 @@ func (b *appConfigurationBuilder) AddJsonFile(filename string) Builder {
 	config, err := newJsonConfiguration(filename)
 	if err != nil {
 		b.err = err
+		return b
 	}
 	b.address = config.Address
 	b.databaseName = config.DatabaseName
