@@ -96,9 +96,10 @@ func createTestSecretFile(filename string, isValid bool) error {
 	if isValid {
 		content = fmt.Sprintf(`{
   "address": "%v",
+  "database_name": "%v",
   "username": "%v",
   "password": "%v"
-}`, expectedSecretAddress, expectedSecretUsername, expectedSecretPassword)
+}`, expectedSecretAddress, expectedSecretDatabaseName, expectedSecretUsername, expectedSecretPassword)
 	} else {
 		content = fmt.Sprintf(`settings:
   address: %v
