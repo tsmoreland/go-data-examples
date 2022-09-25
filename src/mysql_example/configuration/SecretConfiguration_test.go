@@ -7,6 +7,14 @@ import (
 	"testing"
 )
 
+const (
+	expectedSecretAddress      = "https://example.com:6033/secret"
+	expectedSecretDatabaseName = "secret-phi"
+	expectedSecretUsername     = "secret-alpha"
+	expectedSecretPassword     = "secret-bravo"
+	expectedSecretSecretId     = "32345e2f-e70b-4201-b252-ac8668ba0dd0"
+)
+
 func Test_newSecretConfigurationShouldReturnErrorWhenFileNotFound(t *testing.T) {
 	if _, _, err := arrangeSecretFile(t, false, false); err != nil {
 		t.Fatal(err)
