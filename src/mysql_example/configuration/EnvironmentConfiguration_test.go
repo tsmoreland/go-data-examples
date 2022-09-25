@@ -5,6 +5,14 @@ import (
 	"testing"
 )
 
+const (
+	expectedEnvAddress      = "https://example.com:6033/env"
+	expectedEnvDatabaseName = "env-phi"
+	expectedEnvUsername     = "env-alpha"
+	expectedEnvPassword     = "env-bravo"
+	expectedEnvSecretId     = "22346e2f-e70b-4201-b252-ac8668ba0dd0"
+)
+
 func Test_newEnvironmentConfigShouldReturnNilAddressWhenEnvironmentVariableNotSet(t *testing.T) {
 	if _, present := os.LookupEnv(envAddressKey); present {
 		t.Skipf("Addresss already defined")
