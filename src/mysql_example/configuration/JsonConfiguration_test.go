@@ -9,14 +9,6 @@ import (
 	"testing"
 )
 
-const (
-	expectedAddress      = "https://example.com:6033"
-	expectedDatabaseName = "phi"
-	expectedUsername     = "alpha"
-	expectedPassword     = "bravo"
-	expectedSecretId     = "68241e2f-e70b-4201-b252-ac8668ba0dd0"
-)
-
 func Test_newJsonConfiguration_ReturnsError_WhenReadFileReturnsError(t *testing.T) {
 	filename, err := arrangeTestJsonFile(false, false, t)
 	if err != nil {
