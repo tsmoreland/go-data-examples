@@ -12,7 +12,6 @@ const (
 	expectedSecretDatabaseName = "secret-phi"
 	expectedSecretUsername     = "secret-alpha"
 	expectedSecretPassword     = "secret-bravo"
-	expectedSecretSecretId     = "32345e2f-e70b-4201-b252-ac8668ba0dd0"
 )
 
 func Test_newSecretConfigurationShouldReturnErrorWhenFileNotFound(t *testing.T) {
@@ -46,15 +45,19 @@ func Test_newSecretConfigurationShouldNotReturnErrorWhenFileExistsAndValid(t *te
 		t.Fatal(err)
 	}
 
-	if c.Address != expectedAddress {
+	if c.Address != expectedSecretAddress {
 		t.Fatalf("Address %v does not match expected value", c.Address)
 	}
 
-	if c.Username != expectedUsername {
+	if c.DatabaseName != expectedSecretDatabaseName {
+		t.Fatalf("DatabaseName %v does not match expected value", c.Address)
+	}
+
+	if c.Username != expectedSecretUsername {
 		t.Fatalf("Username %v does not match expected value", c.Username)
 	}
 
-	if c.Password != expectedPassword {
+	if c.Password != expectedSecretPassword {
 		t.Fatalf("Password %v does not match expected value", c.Password)
 	}
 
@@ -95,7 +98,7 @@ func createTestSecretFile(filename string, isValid bool) error {
   "address": "%v",
   "username": "%v",
   "password": "%v"
-}`, expectedAddress, expectedUsername, expectedPassword)
+}`, expectedSecretAddress, expectedSecretUsername, expectedSecretPassword)
 	} else {
 		content = fmt.Sprintf(`settings:
   address: %v
