@@ -32,7 +32,13 @@ func Test_AddJsonShouldNotSetErrorWhenFileExistsAndIsValid(t *testing.T) {
 		t.Fatalf("configuration is nil")
 	}
 
-	err = checkIfConfigurationIsExpected(c, false)
+	err = checkIfConfigurationMatches(c,
+		expectedJsonAddress,
+		expectedJsonDatabaseName,
+		expectedJsonUsername,
+		expectedJsonPassword,
+		expectedJsonSecretId,
+		false)
 	if err != nil {
 		t.Fatal(err)
 	}

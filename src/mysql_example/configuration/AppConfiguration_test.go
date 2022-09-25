@@ -48,24 +48,30 @@ func Test_PasswordShouldReturnValuePassedToNewConfiguration(t *testing.T) {
 	}
 }
 
-func checkIfConfigurationIsExpected(c AppConfiguration, checkSecret bool) error {
-	if c == nil {
-		return fmt.Errorf("configuration is nil")
-	}
-	if c.Address() != expectedAddress {
+func checkIfConfigurationMatches(
+	c AppConfiguration,
+	addr string,
+	databaseName string,
+	user string,
+	pw string,
+	secret string,
+	checkSecret bool) error {
+
+	if c.Address() != addr {
 		return fmt.Errorf("address %v does not match expected value", c.Address())
 	}
-	if c.DatabaseName() != expectedDatabaseName {
+	if c.DatabaseName() != databaseName {
 		return fmt.Errorf("DatabaseName %v does not match expected value", c.DatabaseName())
 	}
-	if c.Username() != expectedUsername {
+	if c.Username() != user {
 		return fmt.Errorf("username %v does not match expected value", c.Username())
 	}
-	if c.Password() != expectedPassword {
+	if c.Password() != pw {
 		return fmt.Errorf("password %v does not match expected value", c.Password())
 	}
-	if checkSecret && c.SecretId() != expectedSecretId {
+	if checkSecret && c.SecretId() != secret {
 		return fmt.Errorf("secretId %v does not match expected value", c.SecretId())
 	}
 	return nil
+
 }

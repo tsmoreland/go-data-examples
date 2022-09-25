@@ -62,20 +62,20 @@ func Test_newJsonConfiguration_ReturnsExpectedConfig_WhenFileIsWellFormed(t *tes
 		t.Fatal(err)
 	}
 
-	if c.Address != expectedAddress {
-		t.Fatalf("Address %v does not match expected value", c.Address)
+	if c.Address != expectedJsonAddress {
+		t.Fatalf("address %v does not match expected value", c.Address)
 	}
-	if c.Username != expectedUsername {
-		t.Fatalf("Username %v does not match expected value", c.Username)
+	if c.DatabaseName != expectedJsonDatabaseName {
+		t.Fatalf("DatabaseName %v does not match expected value", c.DatabaseName)
 	}
-	if c.DatabaseName != expectedDatabaseName {
-		t.Fatalf("Database Name %v does not match expected value", c.DatabaseName)
+	if c.Username != expectedJsonUsername {
+		t.Fatalf("username %v does not match expected value", c.Username)
 	}
-	if c.Password != expectedPassword {
-		t.Fatalf("Password %v does not match expected value", c.Password)
+	if c.Password != expectedJsonPassword {
+		t.Fatalf("password %v does not match expected value", c.Password)
 	}
-	if c.SecretId != expectedSecretId {
-		t.Fatalf("SecretId %v does not match expected value", c.SecretId)
+	if c.SecretId != expectedJsonSecretId {
+		t.Fatalf("secretId %v does not match expected value", c.SecretId)
 	}
 }
 
@@ -116,7 +116,7 @@ func createTestJsonFile(filename string, isValid bool) (string, error) {
   "username": "%v",
   "password": "%v",
   "secret": "%v"
-}`, expectedAddress, expectedDatabaseName, expectedUsername, expectedPassword, expectedSecretId)
+}`, expectedJsonAddress, expectedJsonDatabaseName, expectedJsonUsername, expectedJsonPassword, expectedJsonSecretId)
 	} else {
 		content = fmt.Sprintf(`settings:
   address: %v
