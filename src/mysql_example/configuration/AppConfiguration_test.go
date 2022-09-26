@@ -13,6 +13,12 @@ const (
 	expectedSecretId     = "68241e2f-e70b-4201-b252-ac8668ba0dd0"
 )
 
+type configPair struct {
+	Name   string
+	Exists bool
+	Valid  bool
+}
+
 func Test_newConfigurationShouldNotReturnNil(t *testing.T) {
 	c := newConfiguration(expectedAddress, expectedDatabaseName, expectedUsername, expectedPassword)
 	if c == nil {

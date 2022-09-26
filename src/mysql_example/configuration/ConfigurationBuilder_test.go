@@ -79,15 +79,9 @@ func Test_AddEnvironmentShouldReturnExpectedEnvWhenPresentInEnv(t *testing.T) {
 
 }
 
-type ConfigPair struct {
-	Name   string
-	Exists bool
-	Valid  bool
-}
-
 func Test_AddUserSecretsShouldNotReturnErrorWhen(t *testing.T) {
 
-	configPairs := []ConfigPair{
+	configPairs := []configPair{
 		{"fileNotFound", false, false},
 		{"fleFoundButInvalid", true, false},
 		{"validFileFound", true, true},
