@@ -20,8 +20,8 @@ type envConfiguration struct {
 
 func newEnvironmentConfig() *envConfiguration {
 	address := getValueOrNilFromEnv(envAddressKey)
-	username := getValueOrNilFromEnv(envUsernameKey)
 	databaseName := getValueOrNilFromEnv(envDatabaseNameKey)
+	username := getValueOrNilFromEnv(envUsernameKey)
 	password := getValueOrNilFromEnv(envPasswordKey)
 	secret := getValueOrNilFromEnv(envSecretIdKey)
 

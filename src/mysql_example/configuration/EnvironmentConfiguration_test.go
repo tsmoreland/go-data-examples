@@ -64,61 +64,59 @@ func Test_newEnvironmentConfigShouldReturnNilSecretIdWhenEnvironmentVariableNotS
 }
 
 func Test_newEnvironmentConfigShouldReturnExpectedValueAddressWhenEnvironmentVariableSet(t *testing.T) {
-	t.Setenv(envAddressKey, expectedAddress)
+	t.Setenv(envAddressKey, expectedEnvAddress)
 
 	c := newEnvironmentConfig()
 	if c.Address == nil {
 		t.Fatalf("Address not found")
 	}
-	if *c.Address != expectedAddress {
+	if *c.Address != expectedEnvAddress {
 		t.Fatalf("Address %v does not match expected value", c.Address)
 	}
 }
 
 func Test_newEnvironmentConfigShouldReturnExpectedValueDatabaseNameWhenEnvironmentVariableSet(t *testing.T) {
-	t.Setenv(envDatabaseNameKey, expectedDatabaseName)
+	t.Setenv(envDatabaseNameKey, expectedEnvDatabaseName)
 
 	c := newEnvironmentConfig()
 	if c.DatabaseName == nil {
-		t.Fatalf("Password not found")
+		t.Fatalf("DatabaseName not found")
 	}
-	if *c.DatabaseName != expectedDatabaseName {
-		t.Fatalf("Password %v does not match expected value", c.Password)
+	if *c.DatabaseName != expectedEnvDatabaseName {
+		t.Fatalf("DatabaseName %v does not match expected value", *c.DatabaseName)
 	}
 }
 
 func Test_newEnvironmentConfigShouldReturnExpectedValueUsernameWhenEnvironmentVariableSet(t *testing.T) {
-	t.Setenv(envUsernameKey, expectedUsername)
+	t.Setenv(envUsernameKey, expectedEnvUsername)
 
 	c := newEnvironmentConfig()
 	if c.Username == nil {
 		t.Fatalf("Username not found")
 	}
-	if *c.Username != expectedUsername {
+	if *c.Username != expectedEnvUsername {
 		t.Fatalf("Username %v does not match expected value", c.Username)
 	}
 }
 
 func Test_newEnvironmentConfigShouldReturnExpectedValuePasswordWhenEnvironmentVariableSet(t *testing.T) {
-	t.Setenv(envPasswordKey, expectedPassword)
-
+	t.Setenv(envPasswordKey, expectedEnvPassword)
 	c := newEnvironmentConfig()
 	if c.Password == nil {
 		t.Fatalf("Password not found")
 	}
-	if *c.Password != expectedPassword {
+	if *c.Password != expectedEnvPassword {
 		t.Fatalf("Password %v does not match expected value", c.Password)
 	}
 }
 
 func Test_newEnvironmentConfigShouldReturnExpectedValueSecretIdWhenEnvironmentVariableSet(t *testing.T) {
-	t.Setenv(envSecretIdKey, expectedSecretId)
-
+	t.Setenv(envSecretIdKey, expectedEnvSecretId)
 	c := newEnvironmentConfig()
 	if c.SecretId == nil {
 		t.Fatalf("SecretId not found")
 	}
-	if *c.SecretId != expectedSecretId {
+	if *c.SecretId != expectedEnvSecretId {
 		t.Fatalf("SecretId %v does not match expected value", c.SecretId)
 	}
 }
