@@ -47,3 +47,70 @@ func Test_AddJsonShouldNotSetErrorWhenFileExistsAndIsValid(t *testing.T) {
 		t.Fatalf("secret was returned with configuration")
 	}
 }
+
+func Test_AddEnvironmentShouldSetNotSetErrorWhenNotFound(t *testing.T) {
+	_, err := NewBuilder().AddEnvironment().Build()
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
+func Test_AddEnvironmentShouldSetNotSetErrorWhenFound(t *testing.T) {
+	arrangeEnvSettings(t)
+	_, err := NewBuilder().AddEnvironment().Build()
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
+func Test_AddEnvironmentShouldReturnExpectedEnvWhenPresentInEnv(t *testing.T) {
+	arrangeEnvSettings(t)
+	c, err := NewBuilder().AddEnvironment().Build()
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = checkIfConfigurationMatches(c,
+		expectedEnvAddress,
+		expectedEnvDatabaseName,
+		expectedEnvUsername,
+		expectedEnvPassword,
+		expectedEnvSecretId,
+		false)
+
+}
+
+type ConfigPair struct {
+	Name   string
+	Exists bool
+	Valid  bool
+}
+
+func Test_AddUserSecretsShouldNotReturnErrorWhen(t *testing.T) {
+
+	configPairs := []ConfigPair{
+		{"fileNotFound", false, false},
+		{"fleFoundButInvalid", true, false},
+		{"validFileFound", true, true},
+	}
+
+	for _, pair := range configPairs {
+		t.Run(pair.Name, func(t *testing.T) {
+			_, _, err := arrangeSecretFile(t, pair.Exists, pair.Valid)
+			if err != nil {
+				t.Fatal(err)
+			}
+			_, err = NewBuilder().AddUserSecrets().Build()
+			if err != nil {
+				t.Fatal(err)
+			}
+		})
+	}
+}
+
+func arrangeEnvSettings(t *testing.T) {
+	t.Setenv(envAddressKey, expectedEnvAddress)
+	t.Setenv(envDatabaseNameKey, expectedEnvDatabaseName)
+	t.Setenv(envUsernameKey, expectedEnvUsername)
+	t.Setenv(envPasswordKey, expectedEnvPassword)
+	t.Setenv(envSecretIdKey, expectedEnvSecretId)
+}
