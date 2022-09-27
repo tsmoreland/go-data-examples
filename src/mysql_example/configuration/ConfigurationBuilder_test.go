@@ -77,6 +77,9 @@ func Test_AddEnvironmentShouldReturnExpectedEnvWhenPresentInEnv(t *testing.T) {
 		expectedEnvSecretId,
 		false)
 
+	if err != nil {
+		t.Fatal(err)
+	}
 }
 
 func Test_AddUserSecretsShouldNotReturnErrorWhen(t *testing.T) {
@@ -98,6 +101,34 @@ func Test_AddUserSecretsShouldNotReturnErrorWhen(t *testing.T) {
 				t.Fatal(err)
 			}
 		})
+	}
+}
+
+func Test_BuildReturnsShouldReturnValuesFromLastAddedSource(t *testing.T) {
+	filename, err := arrangeTestJsonFile(true, true, t)
+	if err != nil {
+		t.Fatal(err)
+	}
+	arrangeEnvSettings(t)
+	c, err := NewBuilder().
+		AddJsonFile(filename).
+		AddEnvironment().
+		Build()
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	err = checkIfConfigurationMatches(c,
+		expectedEnvAddress,
+		expectedEnvDatabaseName,
+		expectedEnvUsername,
+		expectedEnvPassword,
+		expectedEnvSecretId,
+		false)
+
+	if err != nil {
+		t.Fatal(err)
 	}
 }
 
