@@ -48,6 +48,9 @@ func (b *appConfigurationBuilder) AddEnvironment() Builder {
 	if config.Address != nil {
 		b.address = *config.Address
 	}
+	if config.DatabaseName != nil {
+		b.databaseName = *config.DatabaseName
+	}
 	if config.Username != nil {
 		b.username = *config.Username
 	}
