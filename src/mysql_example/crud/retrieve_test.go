@@ -19,7 +19,7 @@ func Test_FindByIdShouldCallQueryWhenDatabaseAvailabile(t *testing.T) {
 
 	rows := sqlmock.
 		NewRows([]string{"id", "first_name", "last_name"}).
-		AddRow("1", "John", "Smith")
+		AddRow(1, "John", "Smith")
 
 	mock.
 		ExpectQuery("SELECT id, first_name, last_name FROM people WHERE").
