@@ -21,6 +21,7 @@ func Test_AddIfNotPresentShouldReturnErrorIfValueExists(t *testing.T) {
 	rows := sqlmock.
 		NewRows([]string{"id"}).
 		AddRow(1)
+	mock.ExpectBegin()
 	mock.
 		ExpectQuery("SELECT id from people where").
 		WillReturnRows(rows)
