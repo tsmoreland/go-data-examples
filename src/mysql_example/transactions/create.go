@@ -34,7 +34,7 @@ func AddIfNotPresent(db *sql.DB, ctx context.Context, firstname string, lastname
 		return existingId, nil
 	}
 
-	result, err := tx.ExecContext(ctx, "INSERT INTO People (first_name, last_name,) VALUES (?, ?)", firstname, lastname)
+	result, err := tx.ExecContext(ctx, "INSERT INTO People (first_name, last_name) VALUES (?, ?)", firstname, lastname)
 	if err != nil {
 		return 0, err
 	}
