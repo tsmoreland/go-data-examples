@@ -1,42 +1,46 @@
 package configuration
 
 type AppConfiguration interface {
-	Address() string
-	DatabaseName() string
+	Hostname() string
+	Port() int32
 	Username() string
 	Password() string
+	ConnectionOptions() string
 	SecretId() string
 }
 
 type readonlyConfiguration struct {
-	address      string
-	username     string
-	password     string
-	databaseName string
-	secretId     string
+	hostname          string
+	port              int32
+	username          string
+	password          string
+	connectionOptions string
+	secretId          string
 }
 
 func newConfiguration(
-	address string,
-	databaseName string,
+	hostname string,
+	port int32,
 	username string,
-	password string) *readonlyConfiguration {
+	password string,
+	connectionOptions string) *readonlyConfiguration {
 
 	return &readonlyConfiguration{
-		address:      address,
-		databaseName: databaseName,
-		username:     username,
-		password:     password,
-		secretId:     "",
+		hostname:          hostname,
+		port:              port,
+		connectionOptions: connectionOptions,
+		username:          username,
+		password:          password,
+		secretId:          "",
 	}
 }
 
-func (c readonlyConfiguration) Address() string {
-	return c.address
+func (c readonlyConfiguration) Hostname() string {
+	return c.hostname
 }
 
-func (c readonlyConfiguration) DatabaseName() string {
-	return c.databaseName
+func (c readonlyConfiguration) Port() int32 {
+	return c.port
 }
 
 func (c readonlyConfiguration) Username() string {
@@ -45,6 +49,10 @@ func (c readonlyConfiguration) Username() string {
 
 func (c readonlyConfiguration) Password() string {
 	return c.password
+}
+
+func (c readonlyConfiguration) ConnectionOptions() string {
+	return c.connectionOptions
 }
 
 func (c readonlyConfiguration) SecretId() string {
