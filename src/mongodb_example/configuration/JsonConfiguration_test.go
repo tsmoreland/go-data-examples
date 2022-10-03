@@ -10,11 +10,12 @@ import (
 )
 
 const (
-	expectedJsonAddress      = "https://example.com:6033/json"
-	expectedJsonDatabaseName = "json-phi"
-	expectedJsonUsername     = "json-alpha"
-	expectedJsonPassword     = "json-bravo"
-	expectedJsonSecretId     = "12345e2f-e70b-4201-b252-ac8668ba0dd0"
+	expectedJsonHostname          = "example.com"
+	expectedJsonPort              = 28017
+	expectedJsonUsername          = "json-alpha"
+	expectedJsonPassword          = "json-bravo"
+	expectedJsonConnectionOptions = "json-maxPool=37"
+	expectedJsonSecretId          = "12345e2f-e70b-4201-b252-ac8668ba0dd0"
 )
 
 func Test_newJsonConfiguration_ReturnsError_WhenReadFileReturnsError(t *testing.T) {
@@ -62,11 +63,14 @@ func Test_newJsonConfiguration_ReturnsExpectedConfig_WhenFileIsWellFormed(t *tes
 		t.Fatal(err)
 	}
 
-	if c.Address != expectedJsonAddress {
-		t.Fatalf("address %v does not match expected value", c.Address)
+	if c.Hostname != expectedJsonHostname {
+		t.Fatalf("hostname %v does not match expected value", c.Hostname)
 	}
-	if c.DatabaseName != expectedJsonDatabaseName {
-		t.Fatalf("DatabaseName %v does not match expected value", c.DatabaseName)
+	if c.Port != expectedJsonPort {
+		t.Fatalf("port %v does not match expected value", c.Port)
+	}
+	if c.ConnectionOptions != expectedJsonConnectionOptions {
+		t.Fatalf("Connection Options %v does not match expected value", c.ConnectionOptions)
 	}
 	if c.Username != expectedJsonUsername {
 		t.Fatalf("username %v does not match expected value", c.Username)
@@ -111,19 +115,21 @@ func createTestJsonFile(filename string, isValid bool) (string, error) {
 	var content string
 	if isValid {
 		content = fmt.Sprintf(`{
-  "address": "%v",
-  "database_name": "%v",
+  "hostname": "%v",
+  "port": %v,
   "username": "%v",
   "password": "%v",
+  "connection_options": "%v",
   "secret": "%v"
-}`, expectedJsonAddress, expectedJsonDatabaseName, expectedJsonUsername, expectedJsonPassword, expectedJsonSecretId)
+}`, expectedJsonHostname, expectedPort, expectedJsonUsername, expectedJsonPassword, expectedConnectionOptions,
+			expectedJsonSecretId)
 	} else {
 		content = fmt.Sprintf(`settings:
   address: %v
   username: %v
   password: %v
   secret: %v	
-`, expectedAddress, expectedUsername, expectedPassword, expectedSecretId)
+`, expectedHostname, expectedUsername, expectedPassword, expectedSecretId)
 	}
 
 	err := os.WriteFile(filename, []byte(content), 0600)

@@ -6,11 +6,12 @@ import (
 )
 
 type jsonConfiguration struct {
-	Address      string `json:"address"`
-	DatabaseName string `json:"database_name"`
-	Username     string `json:"username"`
-	Password     string `json:"password"`
-	SecretId     string `json:"secret"`
+	Hostname          string `json:"hostname"`
+	Port              int32  `json:"port"`
+	Username          string `json:"username"`
+	Password          string `json:"password"`
+	ConnectionOptions string `json:"connection_options"`
+	SecretId          string `json:"secret"`
 }
 
 func newJsonConfiguration(filename string) (*jsonConfiguration, error) {
