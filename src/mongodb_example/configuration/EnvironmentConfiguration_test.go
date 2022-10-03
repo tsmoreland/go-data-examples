@@ -2,24 +2,35 @@ package configuration
 
 import (
 	"os"
+	"strconv"
 	"testing"
 )
 
 const (
-	expectedEnvAddress      = "https://example.com:6033/env"
-	expectedEnvDatabaseName = "env-phi"
-	expectedEnvUsername     = "env-alpha"
-	expectedEnvPassword     = "env-bravo"
-	expectedEnvSecretId     = "22346e2f-e70b-4201-b252-ac8668ba0dd0"
+	expectedEnvHostname          = "example.com"
+	expectedEnvPort              = 29019
+	expectedEnvUsername          = "env-alpha"
+	expectedEnvPassword          = "env-bravo"
+	expectedEnvConnectionOptions = "env=phi"
+	expectedEnvSecretId          = "22346e2f-e70b-4201-b252-ac8668ba0dd0"
 )
 
-func Test_newEnvironmentConfigShouldReturnNilAddressWhenEnvironmentVariableNotSet(t *testing.T) {
-	if _, present := os.LookupEnv(envAddressKey); present {
-		t.Skipf("Addresss already defined")
+func Test_newEnvironmentConfigShouldReturnNilHostnameWhenEnvironmentVariableNotSet(t *testing.T) {
+	if _, present := os.LookupEnv(envHostnameKey); present {
+		t.Skipf("Hostnames already defined")
 	}
 	c := newEnvironmentConfig()
-	if c.Address != nil {
-		t.Fatalf("Address is not nil")
+	if c.Hostname != nil {
+		t.Fatalf("Hostname is not nil")
+	}
+}
+func Test_newEnvironmentConfigShouldReturnNilPortWhenEnvironmentVariableNotSet(t *testing.T) {
+	if _, present := os.LookupEnv(envPortKey); present {
+		t.Skipf("Ports already defined")
+	}
+	c := newEnvironmentConfig()
+	if c.Port != nil {
+		t.Fatalf("Port is not nil")
 	}
 }
 
@@ -43,12 +54,12 @@ func Test_newEnvironmentConfigShouldReturnNilPasswordWhenEnvironmentVariableNotS
 	}
 }
 
-func Test_newEnvironmentConfigShouldReturnNilDatabaseNameWhenEnvironmentVariableNotSet(t *testing.T) {
-	if _, present := os.LookupEnv(envDatabaseNameKey); present {
+func Test_newEnvironmentConfigShouldReturnNilConnectionOptionsWhenEnvironmentVariableNotSet(t *testing.T) {
+	if _, present := os.LookupEnv(envConnectionOptionsKey); present {
 		t.Skipf("Passwords already defined")
 	}
 	c := newEnvironmentConfig()
-	if c.DatabaseName != nil {
+	if c.ConnectionOptions != nil {
 		t.Fatalf("Password is not nil")
 	}
 }
@@ -63,27 +74,39 @@ func Test_newEnvironmentConfigShouldReturnNilSecretIdWhenEnvironmentVariableNotS
 	}
 }
 
-func Test_newEnvironmentConfigShouldReturnExpectedValueAddressWhenEnvironmentVariableSet(t *testing.T) {
-	t.Setenv(envAddressKey, expectedEnvAddress)
+func Test_newEnvironmentConfigShouldReturnExpectedValueHostnameWhenEnvironmentVariableSet(t *testing.T) {
+	t.Setenv(envHostnameKey, expectedEnvHostname)
 
 	c := newEnvironmentConfig()
-	if c.Address == nil {
-		t.Fatalf("Address not found")
+	if c.Hostname == nil {
+		t.Fatalf("Hostname not found")
 	}
-	if *c.Address != expectedEnvAddress {
-		t.Fatalf("Address %v does not match expected value", c.Address)
+	if *c.Hostname != expectedEnvHostname {
+		t.Fatalf("Hostname %v does not match expected value", c.Hostname)
 	}
 }
 
-func Test_newEnvironmentConfigShouldReturnExpectedValueDatabaseNameWhenEnvironmentVariableSet(t *testing.T) {
-	t.Setenv(envDatabaseNameKey, expectedEnvDatabaseName)
+func Test_newEnvironmentConfigShouldReturnExpectedValuePortWhenEnvironmentVariableSet(t *testing.T) {
+	t.Setenv(envPortKey, strconv.Itoa(expectedEnvPort))
 
 	c := newEnvironmentConfig()
-	if c.DatabaseName == nil {
-		t.Fatalf("DatabaseName not found")
+	if c.Port == nil {
+		t.Fatalf("Port not found")
 	}
-	if *c.DatabaseName != expectedEnvDatabaseName {
-		t.Fatalf("DatabaseName %v does not match expected value", *c.DatabaseName)
+	if *c.Port != expectedEnvPort {
+		t.Fatalf("Port %v does not match expected value", c.Port)
+	}
+}
+
+func Test_newEnvironmentConfigShouldReturnExpectedValueConnectionOptionsWhenEnvironmentVariableSet(t *testing.T) {
+	t.Setenv(envConnectionOptionsKey, expectedEnvConnectionOptions)
+
+	c := newEnvironmentConfig()
+	if c.ConnectionOptions == nil {
+		t.Fatalf("ConnectionOptions not found")
+	}
+	if *c.ConnectionOptions != expectedEnvConnectionOptions {
+		t.Fatalf("ConnectionOptions %v does not match expected value", *c.ConnectionOptions)
 	}
 }
 
