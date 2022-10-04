@@ -38,8 +38,7 @@ func newEnvironmentConfig() *envConfiguration {
 		portValue := int32(portValue64)
 		port = &portValue
 	} else {
-		portValue := int32(-1)
-		port = &portValue
+		port = nil
 	}
 
 	username := getValueOrNilFromEnv(envUsernameKey)
