@@ -8,12 +8,13 @@ type Builder interface {
 }
 
 type appConfigurationBuilder struct {
-	err          error
-	address      string
-	databaseName string
-	username     string
-	password     string
-	secret       string
+	err               error
+	hostname          string
+	port              int32
+	connectionOptions string
+	username          string
+	password          string
+	secret            string
 }
 
 func NewBuilder() Builder {
@@ -30,8 +31,9 @@ func (b *appConfigurationBuilder) AddJsonFile(filename string) Builder {
 		b.err = err
 		return b
 	}
-	b.address = config.Address
-	b.databaseName = config.DatabaseName
+	b.hostname = config.Hostname
+	b.port = config.Port
+	b.connectionOptions = config.ConnectionOptions
 	b.username = config.Username
 	b.password = config.Password
 	b.secret = config.SecretId
@@ -45,11 +47,14 @@ func (b *appConfigurationBuilder) AddEnvironment() Builder {
 
 	config := newEnvironmentConfig()
 
-	if config.Address != nil {
-		b.address = *config.Address
+	if config.Hostname != nil {
+		b.hostname = *config.Hostname
 	}
-	if config.DatabaseName != nil {
-		b.databaseName = *config.DatabaseName
+	if config.Port != nil {
+		b.port = *config.Port
+	}
+	if config.ConnectionOptions != nil {
+		b.connectionOptions = *config.ConnectionOptions
 	}
 	if config.Username != nil {
 		b.username = *config.Username
@@ -74,14 +79,20 @@ func (b *appConfigurationBuilder) AddUserSecrets() Builder {
 		// ignore error, secret is optional
 		return b
 	} else {
-		if config.Address != "" {
-			b.address = config.Address
+		if config.Hostname != "" {
+			b.hostname = config.Hostname
+		}
+		if config.Port >= 0 {
+			b.port = config.Port
 		}
 		if config.Username != "" {
 			b.username = config.Username
 		}
 		if config.Password != "" {
 			b.password = config.Password
+		}
+		if config.ConnectionOptions != "" {
+			b.connectionOptions = config.ConnectionOptions
 		}
 	}
 
@@ -93,6 +104,6 @@ func (b *appConfigurationBuilder) Build() (AppConfiguration, error) {
 		return nil, b.err
 	}
 
-	config := newConfiguration(b.address, b.databaseName, b.username, b.password)
+	config := newConfiguration(b.hostname, b.port, b.username, b.password, b.connectionOptions)
 	return config, nil
 }
