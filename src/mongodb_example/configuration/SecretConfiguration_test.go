@@ -8,10 +8,11 @@ import (
 )
 
 const (
-	expectedSecretAddress      = "https://example.com:6033/secret"
-	expectedSecretDatabaseName = "secret-phi"
-	expectedSecretUsername     = "secret-alpha"
-	expectedSecretPassword     = "secret-bravo"
+	expectedSecretHostname          = "example.com"
+	expectedSecretPort              = 28142
+	expectedSecretConnectionOptions = "secret=phi"
+	expectedSecretUsername          = "secret-alpha"
+	expectedSecretPassword          = "secret-bravo"
 )
 
 func Test_newSecretConfigurationShouldReturnErrorWhenFileNotFound(t *testing.T) {
@@ -45,12 +46,16 @@ func Test_newSecretConfigurationShouldNotReturnErrorWhenFileExistsAndValid(t *te
 		t.Fatal(err)
 	}
 
-	if c.Address != expectedSecretAddress {
-		t.Fatalf("Address %v does not match expected value", c.Address)
+	if c.Hostname != expectedSecretHostname {
+		t.Fatalf("Hostname %v does not match expected value", c.Hostname)
 	}
 
-	if c.DatabaseName != expectedSecretDatabaseName {
-		t.Fatalf("DatabaseName %v does not match expected value", c.Address)
+	if c.Port != expectedSecretPort {
+		t.Fatalf("Port %v does not match expected value", c.Port)
+	}
+
+	if c.ConnectionOptions != expectedSecretConnectionOptions {
+		t.Fatalf("ConnectionOptions %v does not match expected value", c.ConnectionOptions)
 	}
 
 	if c.Username != expectedSecretUsername {
@@ -95,17 +100,19 @@ func createTestSecretFile(filename string, isValid bool) error {
 	var content string
 	if isValid {
 		content = fmt.Sprintf(`{
-  "address": "%v",
-  "database_name": "%v",
+  "hostname": "%v",
+  "port": "%v",
   "username": "%v",
   "password": "%v"
-}`, expectedSecretAddress, expectedSecretDatabaseName, expectedSecretUsername, expectedSecretPassword)
+  "connection_options": "%v",
+}`, expectedSecretHostname, expectedSecretPort, expectedSecretUsername, expectedSecretPassword,
+			expectedSecretConnectionOptions)
 	} else {
 		content = fmt.Sprintf(`settings:
-  address: %v
+  hostname: %v
   username: %v
   password: %v
-`, expectedAddress, expectedUsername, expectedPassword)
+`, expectedHostname, expectedUsername, expectedPassword)
 	}
 
 	err := os.WriteFile(filename, []byte(content), 0600)
