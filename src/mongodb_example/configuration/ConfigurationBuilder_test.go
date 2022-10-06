@@ -1,6 +1,9 @@
 package configuration
 
-import "testing"
+import (
+	"strconv"
+	"testing"
+)
 
 func Test_AddJsonFileShouldSetErrorWhenFileNotFound(t *testing.T) {
 	filename, err := arrangeTestJsonFile(false, false, t)
@@ -33,10 +36,11 @@ func Test_AddJsonShouldNotSetErrorWhenFileExistsAndIsValid(t *testing.T) {
 	}
 
 	err = checkIfConfigurationMatches(c,
-		expectedJsonAddress,
-		expectedJsonDatabaseName,
+		expectedJsonHostname,
+		expectedJsonPort,
 		expectedJsonUsername,
 		expectedJsonPassword,
+		expectedJsonConnectionOptions,
 		expectedJsonSecretId,
 		false)
 	if err != nil {
@@ -70,10 +74,11 @@ func Test_AddEnvironmentShouldReturnExpectedEnvWhenPresentInEnv(t *testing.T) {
 		t.Fatal(err)
 	}
 	err = checkIfConfigurationMatches(c,
-		expectedEnvAddress,
-		expectedEnvDatabaseName,
+		expectedEnvHostname,
+		expectedEnvPort,
 		expectedEnvUsername,
 		expectedEnvPassword,
+		expectedEnvConnectionOptions,
 		expectedEnvSecretId,
 		false)
 
@@ -120,10 +125,11 @@ func Test_BuildReturnsShouldReturnValuesFromLastAddedSource(t *testing.T) {
 	}
 
 	err = checkIfConfigurationMatches(c,
-		expectedEnvAddress,
-		expectedEnvDatabaseName,
+		expectedEnvHostname,
+		expectedEnvPort,
 		expectedEnvUsername,
 		expectedEnvPassword,
+		expectedEnvConnectionOptions,
 		expectedEnvSecretId,
 		false)
 
@@ -133,9 +139,10 @@ func Test_BuildReturnsShouldReturnValuesFromLastAddedSource(t *testing.T) {
 }
 
 func arrangeEnvSettings(t *testing.T) {
-	t.Setenv(envAddressKey, expectedEnvAddress)
-	t.Setenv(envDatabaseNameKey, expectedEnvDatabaseName)
+	t.Setenv(envHostnameKey, expectedEnvHostname)
+	t.Setenv(envPortKey, strconv.Itoa(expectedEnvPort))
 	t.Setenv(envUsernameKey, expectedEnvUsername)
 	t.Setenv(envPasswordKey, expectedEnvPassword)
+	t.Setenv(envConnectionOptionsKey, expectedEnvConnectionOptions)
 	t.Setenv(envSecretIdKey, expectedEnvSecretId)
 }
