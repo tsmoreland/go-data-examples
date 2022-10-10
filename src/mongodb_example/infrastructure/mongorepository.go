@@ -24,10 +24,24 @@ func NewMongoRepository(collection *mongo.Collection, ctx context.Context) (Repo
 }
 
 func (r *MongoRepository) AddPerson(person model.Person) (ObjectId, error) {
-	return nil, fmt.Errorf("not implemented")
+	result, err := r.collection.InsertOne(r.ctx, person)
+	if err != nil {
+		return nil, err
+	}
+	return result.InsertedID, nil
 }
 func (r *MongoRepository) AddPeople(people []model.Person) ([]ObjectId, error) {
-	return []ObjectId{}, fmt.Errorf("not implemented")
+	//this fails (won't compile) need a means of converting people to bson.D (ordered) or bson.M (unordered)
+
+	result, err := r.collection.InsertMany(r.ctx, people)
+	if err != nil {
+		return nil, err
+	}
+	var ids []ObjectId
+	for _, id := range result.InsertedIDs {
+		ids = append(ids, id)
+	}
+	return ids, nil
 }
 
 func (r *MongoRepository) FindById(id ObjectId) (*model.Person, error) {
