@@ -12,6 +12,17 @@ type MongoRepository struct {
 	ctx        context.Context
 }
 
+func NewMongoRepository(collection *mongo.Collection, ctx context.Context) (Repository, error) {
+	if collection == nil {
+		return nil, fmt.Errorf("invalid collection")
+	}
+	if ctx == nil {
+		return nil, fmt.Errorf("invalid context")
+	}
+
+	return &MongoRepository{collection: collection, ctx: ctx}, nil
+}
+
 func (r *MongoRepository) AddPerson(person model.Person) (ObjectId, error) {
 	return nil, fmt.Errorf("not implemented")
 }
