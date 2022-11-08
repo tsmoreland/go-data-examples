@@ -39,7 +39,7 @@ func NewEmployee(firstname string, lastname string, jobCategory int32) (*Employe
 	return &Employee{firstName: firstname, lastName: lastname, jobCategory: jobCategory}, nil
 }
 
-func NewEmployee(id uint, firstname string, lastname string, jobCategory int32) (*Employee, error) {
+func NewEmployeeWithId(id uint, firstname string, lastname string, jobCategory int32) (*Employee, error) {
 	employee, err := NewEmployee(firstname, lastname, jobCategory)
 	if err != nil {
 		return nil, err
@@ -50,9 +50,9 @@ func NewEmployee(id uint, firstname string, lastname string, jobCategory int32) 
 
 func (e Employee) ToEntity() *EmployeeEntity {
 	return &EmployeeEntity{
-		ID: e.id,
-		FirstName: e.firstName,
-		LastName: e.lastName,
-		JobCategory: e.jobCategory
+		ID:          e.id,
+		FirstName:   e.firstName,
+		LastName:    e.lastName,
+		JobCategory: e.jobCategory,
 	}
 }
