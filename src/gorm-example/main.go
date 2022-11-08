@@ -16,17 +16,34 @@ func main() {
 			log.Print(err)
 		}
 	}()
+	VerifyConnectionOrPanic(db)
 
-	dbase := db.DB()
+	CreateTables(db)
+
+}
+
+func VerifyConnectionOrPanic(gormDB *gorm.DB) {
+	db := gormDB.DB()
 	defer func() {
-		if err := dbase.Close(); err != nil {
+		if err := db.Close(); err != nil {
 			log.Print(err)
 		}
 	}()
 
-	if err := dbase.Ping(); err != nil {
+	if err := db.Ping(); err != nil {
 		panic(err.Error())
 	}
 
 	log.Print("Connected to database.")
+}
+
+func CreateTables(db *gorm.DB) {
+	db.CreateTable(&Employee{})
+}
+
+type Employee struct {
+	ID          uint
+	FirstName   string
+	LastName    string
+	JobCategory int32
 }
