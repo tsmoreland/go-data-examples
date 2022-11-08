@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/jinzhu/gorm"
 	_ "github.com/lib/pq"
 	"log"
@@ -16,13 +17,44 @@ func main() {
 			log.Print(err)
 		}
 	}()
-	VerifyConnectionOrPanic(db)
+	verifyConnectionOrPanic(db)
+	resetTables(db)
 
-	CreateTables(db)
+	demoCrud(db)
 
 }
 
-func VerifyConnectionOrPanic(gormDB *gorm.DB) {
+func demoCrud(db *gorm.DB) {
+	employee := Employee{
+		FirstName:   "John",
+		LastName:    "Smith",
+		JobCategory: 1,
+	}
+
+	db.Create(&employee)
+	printEmployee(employee)
+
+	first := Employee{}
+
+	db.First(&first)
+	printEmployee(first)
+
+	last := Employee{}
+	db.Last(&last)
+	printEmployee(last)
+
+	update := Employee{LastName: "Smith"}
+	db.Where(&update).First(&update)
+	printEmployee(update)
+
+	update.FirstName = "Jim"
+	db.Save(&update)
+
+	delete := Employee{LastName: "Smith"}
+	db.Where(&delete).Delete(&delete)
+}
+
+func verifyConnectionOrPanic(gormDB *gorm.DB) {
 	db := gormDB.DB()
 	defer func() {
 		if err := db.Close(); err != nil {
@@ -37,8 +69,13 @@ func VerifyConnectionOrPanic(gormDB *gorm.DB) {
 	log.Print("Connected to database.")
 }
 
-func CreateTables(db *gorm.DB) {
+func resetTables(db *gorm.DB) {
+	db.DropTableIfExists(&Employee{})
 	db.CreateTable(&Employee{})
+}
+
+func printEmployee(employee Employee) {
+	fmt.Printf("%d: %s %s (%d)", employee.ID, employee.FirstName, employee.LastName, employee.JobCategory)
 }
 
 type Employee struct {
