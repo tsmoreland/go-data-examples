@@ -50,8 +50,8 @@ func demoCrud(db *gorm.DB) {
 	update.FirstName = "Jim"
 	db.Save(&update)
 
-	delete := Employee{LastName: "Smith"}
-	db.Where(&delete).Delete(&delete)
+	toRemove := Employee{LastName: "Smith"}
+	db.Where(&toRemove).Delete(&toRemove)
 }
 
 func verifyConnectionOrPanic(gormDB *gorm.DB) {
