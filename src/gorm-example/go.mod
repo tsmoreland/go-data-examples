@@ -1,4 +1,4 @@
-module github.com/tsmoreland/go-data-examples/gorm-example
+module github.com/tsmoreland/go-data-examples/src/gormexample
 
 go 1.19
 

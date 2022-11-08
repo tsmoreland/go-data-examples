@@ -48,6 +48,19 @@ func NewEmployeeWithId(id uint, firstname string, lastname string, jobCategory i
 	return employee, nil
 }
 
+func LoadFromEntity(e EmployeeEntity) *Employee {
+	return &Employee{
+		id:          e.ID,
+		firstName:   e.FirstName,
+		lastName:    e.LastName,
+		jobCategory: e.JobCategory,
+	}
+}
+
+func (e Employee) Print() {
+	fmt.Printf("%d: %s %s (%d)", e.id, e.firstName, e.lastName, e.jobCategory)
+}
+
 func (e Employee) ToEntity() *EmployeeEntity {
 	return &EmployeeEntity{
 		ID:          e.id,

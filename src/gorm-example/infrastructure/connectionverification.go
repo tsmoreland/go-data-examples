@@ -5,7 +5,7 @@ import (
 	"log"
 )
 
-func verifyConnectionOrPanic(db *sql.DB) {
+func VerifyConnectionOrPanic(db *sql.DB) {
 	if err := db.Ping(); err != nil {
 		panic(err.Error())
 	}
