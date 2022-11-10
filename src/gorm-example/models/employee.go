@@ -24,6 +24,10 @@ type EmployeeEntity struct {
 	JobCategory int32
 }
 
+func (e EmployeeEntity) TableName() string {
+	return "employee_entities"
+}
+
 func NewEmployee(firstname string, lastname string, jobCategory int32) (*Employee, error) {
 	if len(firstname) == 0 {
 		return nil, fmt.Errorf("firstname cannot be empty")
