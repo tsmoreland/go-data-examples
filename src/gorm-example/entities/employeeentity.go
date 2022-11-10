@@ -20,6 +20,7 @@ func (e EmployeeEntity) TableName() string {
 
 func CreateEmployeeTable(db *gorm.DB) {
 	db.
+		DropTable(&EmployeeEntity{}).
 		CreateTable(&EmployeeEntity{}).
 		Model(&EmployeeEntity{}).AddIndex("idx_employee_job_category_name", "job_category_name")
 }

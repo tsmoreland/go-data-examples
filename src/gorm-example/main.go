@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/lib/pq"
+	"github.com/tsmoreland/go-data-examples/src/gormexample/entities"
 	"github.com/tsmoreland/go-data-examples/src/gormexample/infrastructure"
 	"github.com/tsmoreland/go-data-examples/src/gormexample/shared"
 )
@@ -19,4 +20,6 @@ func main() {
 	infrastructure.ResetTables(db)
 
 	infrastructure.CrudDemo(db)
+
+	entities.CreateEmployeeTable(db)
 }
