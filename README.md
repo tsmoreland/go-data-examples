@@ -1,2 +1,2 @@
 # go-data-examples
-Sample of GO Database access
+Samples of GO Database access 
