@@ -4,6 +4,7 @@ import "github.com/jinzhu/gorm"
 
 type CalendarEntity struct {
 	gorm.Model
+	Name       string
 	EmployeeID uint
 }
 
