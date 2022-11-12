@@ -15,5 +15,7 @@ func (e Calendar) TableName() string {
 func CreateCalendarTable(db *gorm.DB) {
 	db.
 		DropTable(&Calendar{}).
-		CreateTable(&Calendar{})
+		CreateTable(&Calendar{}).
+		Model(&Calendar{}).
+		AddForeignKey("employee_id", "employees(id)", "CASCADE", "CASCADE")
 }
