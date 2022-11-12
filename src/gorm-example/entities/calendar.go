@@ -11,3 +11,9 @@ type Calendar struct {
 func (e Calendar) TableName() string {
 	return "calendars"
 }
+
+func CreateCalendarTable(db *gorm.DB) {
+	db.
+		DropTable(&Calendar{}).
+		CreateTable(&Calendar{})
+}

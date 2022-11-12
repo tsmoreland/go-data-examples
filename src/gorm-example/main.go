@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/jinzhu/gorm"
 	_ "github.com/lib/pq"
 	"github.com/tsmoreland/go-data-examples/src/gormexample/entities"
@@ -22,4 +23,24 @@ func main() {
 	infrastructure.CrudDemo(db)
 
 	entities.CreateEmployeeTable(db)
+	entities.CreateCalendarTable(db)
+
+	db.Debug().Save(&entities.Employee{
+		FirstName: "Bruce",
+		LastName:  "Wayne",
+		JobCategory: entities.JobCategoryLink{
+			JobCategoryID:   5,
+			JobCategoryName: "Superhero",
+		},
+		Calendar: entities.Calendar{
+			Name: "Events",
+		},
+	})
+
+	e := entities.Employee{}
+	c := entities.Calendar{}
+	db.First(&e).Related(&c)
+
+	fmt.Println(e) // e.Calendar will be nil, First does not load children by default
+	fmt.Println(c)
 }
