@@ -1,11 +1,17 @@
 package entities
 
-import "github.com/jinzhu/gorm"
+import (
+	"github.com/jinzhu/gorm"
+	"time"
+)
 
 type Appointment struct {
 	gorm.Model
-	Name       string
-	CalendarID uint
+	Title       string
+	Description string
+	StartTime   time.Time
+	Length      uint
+	CalendarID  uint
 }
 
 func (e Appointment) TableName() string {

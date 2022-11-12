@@ -7,6 +7,7 @@ import (
 	"github.com/tsmoreland/go-data-examples/src/gormexample/entities"
 	"github.com/tsmoreland/go-data-examples/src/gormexample/infrastructure"
 	"github.com/tsmoreland/go-data-examples/src/gormexample/shared"
+	"time"
 )
 
 func main() {
@@ -34,7 +35,15 @@ func main() {
 			JobCategoryName: "Superhero",
 		},
 		Calendar: entities.Calendar{
-			Name: "Events",
+			Name: "Crimes",
+			Appointments: []entities.Appointment{
+				{
+					Title:       "On Leather Wings",
+					Description: "A mysterious bat-like creature terrorizes Gotham City, causing the police force to pursue Batman. The Dark Knight must find the real perpetrator to clear his name.",
+					StartTime:   time.Date(1992, time.May, 6, 9, 30, 0, 0, time.UTC),
+					Length:      30,
+				},
+			},
 		},
 	})
 
