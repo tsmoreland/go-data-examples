@@ -27,21 +27,48 @@ func main() {
 	entities.CreateCalendarTable(db)
 	entities.CreateAppointmentsTable(db)
 
+	employees := []entities.Employee{
+		{
+			FirstName: "Bruce",
+			LastName:  "Wayne",
+			JobCategory: entities.JobCategoryLink{
+				JobCategoryID:   5,
+				JobCategoryName: "Superhero",
+			},
+			Calendar: entities.Calendar{
+				Name: "Episodes",
+				Appointments: []entities.Appointment{
+					{
+						Title:       "On Leather Wings",
+						Description: "A mysterious bat-like creature terrorizes Gotham City, causing the police force to pursue Batman. The Dark Knight must find the real perpetrator to clear his name.",
+						StartTime:   time.Date(1992, time.May, 6, 9, 30, 0, 0, time.UTC),
+						Length:      30,
+					},
+				},
+			},
+		},
+	}
+
+	for e := range employees {
+		db.Debug().Save(&e)
+	}
+
 	db.Debug().Save(&entities.Employee{
-		FirstName: "Bruce",
-		LastName:  "Wayne",
+		FirstName: "Clark",
+		LastName:  "Kent",
 		JobCategory: entities.JobCategoryLink{
 			JobCategoryID:   5,
 			JobCategoryName: "Superhero",
 		},
 		Calendar: entities.Calendar{
-			Name: "Crimes",
+			Name: "Episodes",
 			Appointments: []entities.Appointment{
 				{
-					Title:       "On Leather Wings",
-					Description: "A mysterious bat-like creature terrorizes Gotham City, causing the police force to pursue Batman. The Dark Knight must find the real perpetrator to clear his name.",
-					StartTime:   time.Date(1992, time.May, 6, 9, 30, 0, 0, time.UTC),
+					Title:       "World's Finest",
+					Description: "The Joker steals a large piece of Kryptonite and then comes to Metropolis, offering to kill Superman for Lex Luthor in exchange for one billion dollars",
+					StartTime:   time.Date(1997, time.October, 4, 9, 30, 0, 0, time.UTC),
 					Length:      30,
+					Attendees:   employees,
 				},
 			},
 		},
