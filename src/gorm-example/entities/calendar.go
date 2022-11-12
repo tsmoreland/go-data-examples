@@ -4,8 +4,9 @@ import "github.com/jinzhu/gorm"
 
 type Calendar struct {
 	gorm.Model
-	Name       string
-	EmployeeID uint `sql:"column:'employee_id'"`
+	Name         string
+	EmployeeID   uint `sql:"column:'employee_id'"`
+	Appointments []Appointment
 }
 
 func (e Calendar) TableName() string {
