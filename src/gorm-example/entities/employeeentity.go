@@ -7,6 +7,7 @@ type EmployeeEntity struct {
 	FirstName   string          `sql:"type:VARCHAR(100);not null" gorm:"column:first_name"`
 	LastName    string          `sql:"size:100;not null"`
 	JobCategory JobCategoryLink `gorm:"embedded"`
+	Calendar    CalendarEntity
 }
 
 type JobCategoryLink struct {
