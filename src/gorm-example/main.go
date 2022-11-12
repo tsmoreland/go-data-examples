@@ -24,6 +24,7 @@ func main() {
 
 	entities.CreateEmployeeTable(db)
 	entities.CreateCalendarTable(db)
+	entities.CreateAppointmentsTable(db)
 
 	db.Debug().Save(&entities.Employee{
 		FirstName: "Bruce",
