@@ -15,13 +15,20 @@ type JobCategoryLink struct {
 	JobCategoryName string `sql:"size:100;not null;DEFAULT:'Engineer'"`
 }
 
-func (e Employee) TableName() string {
-	return "employees"
-}
-
 func CreateEmployeeTable(db *gorm.DB) {
 	db.
 		DropTableIfExists(&Employee{}).
 		CreateTable(&Employee{}).
 		Model(&Employee{}).AddIndex("idx_employee_job_category_name", "job_category_name")
+}
+
+func (e *Employee) TableName() string {
+	return "employees"
+}
+
+func (e *Employee) BeforeUpdate() error {
+	return nil
+}
+func (e *Employee) AfterUpdate() error {
+	return nil
 }
