@@ -6,6 +6,7 @@ import (
 	_ "github.com/lib/pq"
 	"github.com/tsmoreland/go-data-examples/src/gormexample/entities"
 	"github.com/tsmoreland/go-data-examples/src/gormexample/infrastructure"
+	"github.com/tsmoreland/go-data-examples/src/gormexample/models"
 	"github.com/tsmoreland/go-data-examples/src/gormexample/shared"
 	"time"
 )
@@ -32,7 +33,7 @@ func main() {
 			FirstName: "Bruce",
 			LastName:  "Wayne",
 			JobCategory: entities.JobCategoryLink{
-				JobCategoryID:   5,
+				JobCategoryID:   models.JobCategorySuperHero,
 				JobCategoryName: "Superhero",
 			},
 			Calendar: entities.Calendar{
@@ -57,7 +58,7 @@ func main() {
 		FirstName: "Clark",
 		LastName:  "Kent",
 		JobCategory: entities.JobCategoryLink{
-			JobCategoryID:   5,
+			JobCategoryID:   models.JobCategorySuperHero,
 			JobCategoryName: "Superhero",
 		},
 		Calendar: entities.Calendar{
