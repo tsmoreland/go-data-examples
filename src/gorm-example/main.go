@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	models.IgnoreUnusedCategories()
+	models.IgnoreUnused()
 
 	db, err := gorm.Open("postgres", "host=localhost port=5432 user=postgres password=P@55w0rd! dbname=gormexample sslmode=disable")
 	if err != nil {

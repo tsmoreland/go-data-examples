@@ -27,11 +27,12 @@ type EmployeeEntity struct {
 	JobCategory int32
 }
 
-func IgnoreUnusedCategories() {
+func IgnoreUnused() {
 	_ = JobCategoryEngineer
 	_ = JobCategoryIT
 	_ = JobCategorySupport
 	_ = JobCategorySales
+	_, _ = NewEmployeeWithId(0, "", "", JobCategoryEngineer)
 }
 
 func (e EmployeeEntity) TableName() string {
