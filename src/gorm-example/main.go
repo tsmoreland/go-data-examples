@@ -43,5 +43,10 @@ func main() {
 	db.Where(&harley).First(&harley).Related(&harleyCalendar)
 	db.Debug().Model(&harley).Update("job_category_id", models.JobCategoryAntiHero)
 	db.Debug().Model(&harley).Update("job_category_name", "Anti Hero")
+	db.Debug().Model(&harley).Updates(
+		map[string]interface{}{
+			"job_category_id":   models.JobCategoryAntiHero,
+			"job_category_name": "Anti Hero",
+		})
 
 }
