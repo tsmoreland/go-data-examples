@@ -49,4 +49,15 @@ func main() {
 			"job_category_name": "Anti Hero",
 		})
 
+	// bulk-update when set is known
+	db.
+		Debug().
+		Table("appointments").
+		Where("length = ?", 30).
+		Update("Length", 22) // 24 is more accurate, handled by subsequent update
+	db.
+		Debug().
+		Table("appointments").
+		Where("length = ?", 22).
+		Update("length", gorm.Expr("length + 2"))
 }
