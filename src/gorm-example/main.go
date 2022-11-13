@@ -60,4 +60,11 @@ func main() {
 		Table("appointments").
 		Where("length = ?", 22).
 		Update("length", gorm.Expr("length + 2"))
+
+	// bulk delete
+	db.
+		Debug().
+		Where("last_name LIKE ?", "%mite").
+		Delete(&entities.Employee{})
+
 }

@@ -3,7 +3,7 @@ package entities
 import "github.com/jinzhu/gorm"
 
 type Employee struct {
-	ID          uint
+	gorm.Model
 	FirstName   string          `sql:"type:VARCHAR(100);not null" gorm:"column:first_name"`
 	LastName    string          `sql:"size:100;not null"`
 	JobCategory JobCategoryLink `gorm:"embedded"`
