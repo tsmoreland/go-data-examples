@@ -12,7 +12,8 @@ func CreateTables(db *gorm.DB) {
 	CreateAppointmentsTable(db)
 }
 
-func SeedDb(db *gorm.DB) {
+func SeedDb(db *gorm.DB) error {
+	tx := db.Begin()
 	employees := []Employee{
 		{
 			FirstName: "Bruce",
@@ -44,10 +45,13 @@ func SeedDb(db *gorm.DB) {
 	}
 
 	for e := range employees {
-		db.Debug().Create(&e)
+		if err := tx.Create(&e).Error; err != nil {
+			tx.Rollback()
+			return err
+		}
 	}
 
-	db.Debug().Create(&Employee{
+	err := tx.Create(&Employee{
 		FirstName: "Clark",
 		LastName:  "Kent",
 		JobCategory: JobCategoryLink{
@@ -66,5 +70,14 @@ func SeedDb(db *gorm.DB) {
 				},
 			},
 		},
-	})
+	}).Error
+
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	tx.Commit()
+
+	return nil
 }
