@@ -9,6 +9,7 @@ const (
 	JobCategorySales
 	JobCategoryManager
 	JobCategorySuperHero
+	JobCategoryVillain
 )
 
 type Employee struct {
