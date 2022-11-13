@@ -27,6 +27,13 @@ type EmployeeEntity struct {
 	JobCategory int32
 }
 
+func IgnoreUnusedCategories() {
+	_ = JobCategoryEngineer
+	_ = JobCategoryIT
+	_ = JobCategorySupport
+	_ = JobCategorySales
+}
+
 func (e EmployeeEntity) TableName() string {
 	return "employee_entities"
 }
