@@ -21,7 +21,7 @@ func (e Employee) TableName() string {
 
 func CreateEmployeeTable(db *gorm.DB) {
 	db.
-		DropTable(&Employee{}).
+		DropTableIfExists(&Employee{}).
 		CreateTable(&Employee{}).
 		Model(&Employee{}).AddIndex("idx_employee_job_category_name", "job_category_name")
 }

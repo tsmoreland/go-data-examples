@@ -5,7 +5,7 @@ import "github.com/jinzhu/gorm"
 type Calendar struct {
 	gorm.Model
 	Name         string
-	EmployeeID   uint `sql:"column:'employee_id'"`
+	EmployeeID   uint `sql:"column:employee_id"`
 	Appointments []Appointment
 }
 
@@ -15,7 +15,7 @@ func (e Calendar) TableName() string {
 
 func CreateCalendarTable(db *gorm.DB) {
 	db.
-		DropTable(&Calendar{}).
+		DropTableIfExists(&Calendar{}).
 		CreateTable(&Calendar{}).
 		Model(&Calendar{}).
 		AddForeignKey("employee_id", "employees(id)", "CASCADE", "CASCADE")

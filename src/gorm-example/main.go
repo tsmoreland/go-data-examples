@@ -36,7 +36,7 @@ func main() {
 				JobCategoryName: "Superhero",
 			},
 			Calendar: entities.Calendar{
-				Name: "Episodes",
+				Name: "Batman TAS",
 				Appointments: []entities.Appointment{
 					{
 						Title:       "On Leather Wings",
@@ -61,7 +61,7 @@ func main() {
 			JobCategoryName: "Superhero",
 		},
 		Calendar: entities.Calendar{
-			Name: "Episodes",
+			Name: "Superman TAS",
 			Appointments: []entities.Appointment{
 				{
 					Title:       "World's Finest",

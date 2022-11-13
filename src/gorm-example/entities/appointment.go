@@ -21,6 +21,6 @@ func (e Appointment) TableName() string {
 
 func CreateAppointmentsTable(db *gorm.DB) {
 	db.
-		DropTable(&Appointment{}).
+		DropTableIfExists(&Appointment{}).
 		CreateTable(&Appointment{})
 }
