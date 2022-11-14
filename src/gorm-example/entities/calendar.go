@@ -6,7 +6,7 @@ type Calendar struct {
 	gorm.Model
 	Name         string
 	EmployeeID   uint `sql:"column:employee_id"`
-	Appointments []Appointment
+	Appointments []*Appointment
 }
 
 func (e Calendar) TableName() string {

@@ -12,7 +12,7 @@ type Appointment struct {
 	StartTime   time.Time
 	Length      uint
 	CalendarID  uint
-	Attendees   []Employee `gorm:"many2many:appointment_employee"`
+	Attendees   []*Employee `gorm:"many2many:appointment_employee"`
 }
 
 func (e Appointment) TableName() string {

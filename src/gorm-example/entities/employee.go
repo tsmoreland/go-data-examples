@@ -32,3 +32,7 @@ func (e *Employee) BeforeUpdate() error {
 func (e *Employee) AfterUpdate() error {
 	return nil
 }
+
+func (e *Employee) AddAppointment(a *Appointment) {
+	e.Calendar.Appointments = append(e.Calendar.Appointments, a)
+}
