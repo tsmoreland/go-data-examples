@@ -42,4 +42,6 @@ func main() {
 	examples.BulkUpdateWhenSetValueIsCalculated(db)
 	examples.BulkDelete(db)
 
+	var martianManHunter entities.Employee
+	examples.FirstEmployeeOrInit(db, &martianManHunter, &entities.Employee{FirstName: "J'onn", LastName: "J'onzz"})
 }
