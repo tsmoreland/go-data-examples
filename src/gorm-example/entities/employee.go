@@ -1,6 +1,9 @@
 package entities
 
-import "github.com/jinzhu/gorm"
+import (
+	"fmt"
+	"github.com/jinzhu/gorm"
+)
 
 type Employee struct {
 	gorm.Model
@@ -35,4 +38,11 @@ func (e *Employee) AfterUpdate() error {
 
 func (e *Employee) AddAppointment(a *Appointment) {
 	e.Calendar.Appointments = append(e.Calendar.Appointments, a)
+}
+
+func PrintNames(employees []Employee) {
+	fmt.Printf("(%v) Employees:", len(employees))
+	for _, e := range employees {
+		fmt.Printf("%v %v\n", e.FirstName, e.LastName)
+	}
 }

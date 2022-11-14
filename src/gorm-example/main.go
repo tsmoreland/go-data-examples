@@ -44,4 +44,6 @@ func main() {
 
 	var martianManHunter entities.Employee
 	examples.FirstEmployeeOrInit(db, &martianManHunter, &entities.Employee{FirstName: "J'onn", LastName: "J'onzz"})
+
+	examples.DemoGetAll(db)
 }
