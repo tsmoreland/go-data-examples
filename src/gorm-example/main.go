@@ -54,4 +54,7 @@ func main() {
 
 	employees = examples.FindByFirstName(db, "Bruce", "Clark", "Diana")
 	entities.PrintNames(employees)
+
+	employees = examples.FindAllNonVillains(db)
+	entities.PrintNames(employees)
 }

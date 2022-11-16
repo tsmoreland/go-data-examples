@@ -3,6 +3,7 @@ package examples
 import (
 	"github.com/jinzhu/gorm"
 	"github.com/tsmoreland/go-data-examples/src/gormexample/entities"
+	"github.com/tsmoreland/go-data-examples/src/gormexample/models"
 )
 
 func FindByName(db *gorm.DB, firstName string, lastName string) []entities.Employee {
@@ -17,14 +18,17 @@ func FindByName(db *gorm.DB, firstName string, lastName string) []entities.Emplo
 func FindByLastNames(db *gorm.DB, lastNames ...string) []entities.Employee {
 	var employees []entities.Employee
 
+	query := db.Debug()
+	first := true
 	for _, lastName := range lastNames {
-		var matches []entities.Employee
-		db.Debug().Where(map[string]interface{}{"last_name": lastName}).Find(&matches)
-
-		for _, match := range matches {
-			employees = append(employees, match)
+		if first {
+			query = query.Where(map[string]interface{}{"last_name": lastName})
+			first = false
+		} else {
+			query = query.Or(map[string]interface{}{"last_name": lastName})
 		}
 	}
+	query.Find(&employees)
 	return employees
 }
 
@@ -33,5 +37,11 @@ func FindByFirstName(db *gorm.DB, firstNames ...string) []entities.Employee {
 
 	db.Debug().Where("first_name in (?)", firstNames).Find(&employees)
 
+	return employees
+}
+
+func FindAllNonVillains(db *gorm.DB) []entities.Employee {
+	var employees []entities.Employee
+	db.Debug().Not("jobcategory_id = ?", models.JobCategoryVillain).Find(&employees)
 	return employees
 }
