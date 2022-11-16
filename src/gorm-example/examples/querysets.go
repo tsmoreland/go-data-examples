@@ -27,3 +27,11 @@ func FindByLastNames(db *gorm.DB, lastNames ...string) []entities.Employee {
 	}
 	return employees
 }
+
+func FindByFirstName(db *gorm.DB, firstNames ...string) []entities.Employee {
+	var employees []entities.Employee
+
+	db.Debug().Where("first_name in (?)", firstNames).Find(&employees)
+
+	return employees
+}
