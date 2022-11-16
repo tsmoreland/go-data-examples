@@ -13,3 +13,17 @@ func FindByName(db *gorm.DB, firstName string, lastName string) []entities.Emplo
 		Find(&employees)
 	return employees
 }
+
+func FindByLastNames(db *gorm.DB, lastNames ...string) []entities.Employee {
+	var employees []entities.Employee
+
+	for _, lastName := range lastNames {
+		var matches []entities.Employee
+		db.Debug().Where(map[string]interface{}{"last_name": lastName}).Find(&matches)
+
+		for _, match := range matches {
+			employees = append(employees, match)
+		}
+	}
+	return employees
+}
