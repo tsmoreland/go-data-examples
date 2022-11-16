@@ -51,4 +51,7 @@ func main() {
 
 	employees = examples.FindByLastNames(db, "Wayne", "Kent", "Prince")
 	entities.PrintNames(employees)
+
+	employees = examples.FindByFirstName(db, "Bruce", "Clark", "Diana")
+	entities.PrintNames(employees)
 }
