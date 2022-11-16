@@ -46,4 +46,6 @@ func main() {
 	examples.FirstEmployeeOrInit(db, &martianManHunter, &entities.Employee{FirstName: "J'onn", LastName: "J'onzz"})
 
 	examples.DemoGetAll(db)
+	waynes := examples.FindByName(db, "Bruce", "Wayne")
+	entities.PrintNames(waynes)
 }
