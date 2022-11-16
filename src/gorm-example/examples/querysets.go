@@ -15,6 +15,16 @@ func FindByName(db *gorm.DB, firstName string, lastName string) []entities.Emplo
 	return employees
 }
 
+func FindByNameWithCalendar(db *gorm.DB, firstName string, lastName string) []entities.Employee {
+	var employees []entities.Employee
+	db.
+		Debug().
+		Where("first_name = ? AND last_name = ?", firstName, lastName).
+		Preloads("Calendar").
+		Find(&employees)
+	return employees
+}
+
 func FindByLastNames(db *gorm.DB, lastNames ...string) []entities.Employee {
 	var employees []entities.Employee
 

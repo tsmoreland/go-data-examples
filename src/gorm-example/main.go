@@ -49,6 +49,9 @@ func main() {
 	employees := examples.FindByName(db, "Bruce", "Wayne")
 	entities.PrintNames(employees)
 
+	employees = examples.FindByNameWithCalendar(db, "Bruce", "Wayne")
+	entities.PrintNames(employees)
+
 	employees = examples.FindByLastNames(db, "Wayne", "Kent", "Prince")
 	entities.PrintNames(employees)
 
