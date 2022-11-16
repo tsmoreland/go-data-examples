@@ -20,7 +20,7 @@ func FindByNameWithCalendar(db *gorm.DB, firstName string, lastName string) []en
 	db.
 		Debug().
 		Where("first_name = ? AND last_name = ?", firstName, lastName).
-		Preloads("Calendar").
+		Preloads("Calendar.Appointments").
 		Find(&employees)
 	return employees
 }
