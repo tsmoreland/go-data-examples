@@ -14,6 +14,8 @@ func GetAll(db *gorm.DB, pageNumber int, pageSize int) []entities.Employee {
 	var employees []entities.Employee
 	db.
 		Debug().
+		Order("last_name DESC").
+		Offset(skip).
 		Limit(take).
 		Find(&employees)
 	return employees
