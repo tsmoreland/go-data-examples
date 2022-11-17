@@ -6,7 +6,7 @@ import (
 	"github.com/tsmoreland/go-data-examples/src/gormexample/models"
 )
 
-func GetAll(db *gorm.DB, pageNumber int, pageSize int) []entities.Employee {
+func GetPagedEmployees(db *gorm.DB, pageNumber int, pageSize int) []entities.Employee {
 
 	skip := (pageNumber - 1) * pageSize
 	take := pageSize
