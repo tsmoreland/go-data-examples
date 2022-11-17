@@ -30,3 +30,12 @@ func LastEmployee(db *gorm.DB) *entities.Employee {
 	db.Debug().Last(&e)
 	return &e
 }
+
+func LastEmployeeIncludingAppointments(db *gorm.DB) *entities.Employee {
+	var e entities.Employee
+	db.
+		Debug().
+		Preloads("Calendar.Appointments").
+		Last(&e)
+	return &e
+}
