@@ -21,7 +21,7 @@ func GetPagedEmployees(db *gorm.DB, pageNumber int, pageSize int) []entities.Emp
 	return employees
 }
 
-func GetPagedProjections(db *gorm.DB, pageNumber int, pageSize int) []entities.Employee {
+func GetSimplePagedProjections(db *gorm.DB, pageNumber int, pageSize int) []entities.Employee {
 	skip := (pageNumber - 1) * pageSize
 	take := pageSize
 	var employees []entities.Employee
@@ -34,6 +34,20 @@ func GetPagedProjections(db *gorm.DB, pageNumber int, pageSize int) []entities.E
 		Find(&employees)
 
 	return employees
+}
+func GetPagedLastnames(db *gorm.DB, pageNumber int, pageSize int) []string {
+	skip := (pageNumber - 1) * pageSize
+	take := pageSize
+	var lastnames []string{}
+
+	db.
+		Debug().
+		Model(&entities.Employee{}).
+		Order("last_name DESC").
+		Offset(skip).
+		Limit(take).
+		Pluck("last_name", &lastnames)
+	return lastnames
 }
 
 func FindByName(db *gorm.DB, firstName string, lastName string) []entities.Employee {
