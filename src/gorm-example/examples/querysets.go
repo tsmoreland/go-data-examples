@@ -7,7 +7,6 @@ import (
 )
 
 func GetPagedEmployees(db *gorm.DB, pageNumber int, pageSize int) []entities.Employee {
-
 	skip := (pageNumber - 1) * pageSize
 	take := pageSize
 
@@ -17,7 +16,23 @@ func GetPagedEmployees(db *gorm.DB, pageNumber int, pageSize int) []entities.Emp
 		Order("last_name DESC").
 		Offset(skip).
 		Limit(take).
+		Preloads("Calendar.Appointments").
 		Find(&employees)
+	return employees
+}
+
+func GetPagedProjections(db *gorm.DB, pageNumber int, pageSize int) []entities.Employee {
+	skip := (pageNumber - 1) * pageSize
+	take := pageSize
+	var employees []entities.Employee
+	db.
+		Debug().
+		Order("last_name DESC").
+		Offset(skip).
+		Limit(take).
+		Select([]string{"first_name", "last_name"}).
+		Find(&employees)
+
 	return employees
 }
 
