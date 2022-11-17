@@ -38,7 +38,7 @@ func GetSimplePagedProjections(db *gorm.DB, pageNumber int, pageSize int) []enti
 func GetPagedLastnames(db *gorm.DB, pageNumber int, pageSize int) []string {
 	skip := (pageNumber - 1) * pageSize
 	take := pageSize
-	var lastnames []string{}
+	var lastnames []string
 
 	db.
 		Debug().
