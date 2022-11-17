@@ -1,6 +1,6 @@
 package projections
 
-type EmployeeNames struct {
+type EmployeeName struct {
 	FirstName string
 	LastName  string
 }
