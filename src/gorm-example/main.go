@@ -60,4 +60,7 @@ func main() {
 
 	employees = examples.FindAllNonVillains(db)
 	entities.PrintNames(employees)
+
+	employees = examples.GetPagedEmployees(db, 2, 2)
+	entities.PrintNames(employees)
 }
