@@ -4,6 +4,7 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/tsmoreland/go-data-examples/src/gormexample/entities"
 	"github.com/tsmoreland/go-data-examples/src/gormexample/models"
+	"github.com/tsmoreland/go-data-examples/src/gormexample/projections"
 )
 
 func GetPagedEmployees(db *gorm.DB, pageNumber int, pageSize int) []entities.Employee {
@@ -48,6 +49,23 @@ func GetPagedLastnames(db *gorm.DB, pageNumber int, pageSize int) []string {
 		Limit(take).
 		Pluck("last_name", &lastnames)
 	return lastnames
+}
+
+func GetPagednames(db *gorm.DB, pageNumber int, pageSize int) []projections.EmployeeName {
+	skip := (pageNumber - 1) * pageSize
+	take := pageSize
+	var names []projections.EmployeeName
+
+	db.
+		Debug().
+		Model(&entities.Employee{}).
+		Order("last_name DESC").
+		Offset(skip).
+		Limit(take).
+		Select([]string{"first_name", "last_name"}).
+		Scan(&names)
+
+	return names
 }
 
 func FindByName(db *gorm.DB, firstName string, lastName string) []entities.Employee {
