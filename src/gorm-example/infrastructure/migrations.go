@@ -13,6 +13,8 @@ func ResetCrudTables(db *gorm.DB) {
 }
 
 func CreateTables(db *gorm.DB) {
+	db.DropTableIfExists(&entities.Employee{}, &entities.Calendar{}, &entities.Appointment{}, "appointment_user")
+
 	entities.CreateEmployeeTable(db)
 	entities.CreateCalendarTable(db)
 	entities.CreateAppointmentsTable(db)
