@@ -4,8 +4,8 @@ import "github.com/jinzhu/gorm"
 
 type Calendar struct {
 	gorm.Model
-	Name         string
-	EmployeeID   uint `sql:"column:employee_id"`
+	Name         string `sql:"index:idx_calendar_name""`
+	EmployeeID   uint   `sql:"column:employee_id,index:idx_calendar_user_id"`
 	Appointments []*Appointment
 }
 

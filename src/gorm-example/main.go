@@ -26,7 +26,8 @@ func main() {
 
 	infrastructure.CrudDemo(db)
 
-	infrastructure.CreateTables(db)
+	// use false when demonstrating adding columns to existing db
+	infrastructure.CreateTables(db, true)
 	if err := infrastructure.SeedDb(db); err != nil {
 		panic(err)
 	}

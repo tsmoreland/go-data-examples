@@ -12,12 +12,29 @@ func ResetCrudTables(db *gorm.DB) {
 	db.CreateTable(&models.EmployeeEntity{})
 }
 
-func CreateTables(db *gorm.DB) {
-	db.DropTableIfExists(&entities.Employee{}, &entities.Calendar{}, &entities.Appointment{}, "appointment_user")
+func CreateTables(db *gorm.DB, migratingExisting bool) {
+	if migratingExisting {
+		db.DropTableIfExists(
+			&entities.Employee{},
+			&entities.Calendar{},
+			&entities.Appointment{},
+			&entities.Attachment{},
+			"appointment_user")
 
-	entities.CreateEmployeeTable(db)
-	entities.CreateCalendarTable(db)
-	entities.CreateAppointmentsTable(db)
+		// Alternatively (we're not doing this because the individual CreateTable calls have extra setup
+		// db.CreateTable(&entities.Employee{}, &entities.Calendar{}, &entities.Appointment{}, &entities.Attachment{})
+
+		entities.CreateEmployeeTable(db)
+		entities.CreateCalendarTable(db)
+		entities.CreateAppointmentsTable(db)
+		entities.CreateAttachmentTable(db)
+	} else {
+
+		db.
+			Debug().
+			AutoMigrate(&entities.Employee{}, &entities.Calendar{}, &entities.Appointment{}, &entities.Attachment{})
+	}
+
 }
 
 func SeedDb(db *gorm.DB) error {

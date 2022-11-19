@@ -5,6 +5,8 @@ import (
 	"time"
 )
 
+// Appointment represents a calendar entry.  The Recurring field should be commented out when first creating tables to
+// demonstrate updating an existing table
 type Appointment struct {
 	gorm.Model
 	Title       string
@@ -12,7 +14,9 @@ type Appointment struct {
 	StartTime   time.Time
 	Length      uint
 	CalendarID  uint
+	Recurring   bool
 	Attendees   []*Employee `gorm:"many2many:appointment_employee"`
+	Attachments []Attachment
 }
 
 func (e Appointment) TableName() string {

@@ -20,8 +20,7 @@ type JobCategoryLink struct {
 
 func CreateEmployeeTable(db *gorm.DB) {
 	db.
-		CreateTable(&Employee{}).
-		Model(&Employee{}).AddIndex("idx_employee_job_category_name", "job_category_name")
+		CreateTable(&Employee{})
 }
 
 func (e *Employee) TableName() string {
