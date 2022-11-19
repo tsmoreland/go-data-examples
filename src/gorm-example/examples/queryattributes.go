@@ -5,7 +5,7 @@ import (
 	"github.com/tsmoreland/go-data-examples/src/gormexample/entities"
 )
 
-func firstByLastNameOrInvalid(db *gorm.DB, lastName string) *entities.Employee {
+func FirstByLastNameOrInvalid(db *gorm.DB, lastName string) *entities.Employee {
 	var employee entities.Employee
 	db.
 		Debug().
