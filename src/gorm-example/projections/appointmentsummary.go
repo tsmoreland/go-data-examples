@@ -5,6 +5,6 @@ import "time"
 type AppointmentSummary struct {
 	FirstName string
 	LastName  string
-	Title     String
+	Title     string
 	StartTime time.Time
 }
