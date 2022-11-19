@@ -117,3 +117,9 @@ func FindAllNonVillains(db *gorm.DB) []entities.Employee {
 	db.Debug().Not("jobcategory_id = ?", models.JobCategoryVillain).Find(&employees)
 	return employees
 }
+
+func GetAllEmployeesUsingRawSql(db *gorm.DB) []entities.Employee {
+	var employees []entities.Employee
+	db.Debug().Exec("Select * from employees").Find(&employees)
+	return employees
+}
