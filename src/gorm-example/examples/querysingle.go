@@ -39,3 +39,7 @@ func LastEmployeeIncludingAppointments(db *gorm.DB) *entities.Employee {
 		Last(&e)
 	return &e
 }
+
+func NextAppointmentForEmployee(db *gorm.DB, firstName string, lastName string) {
+
+}
