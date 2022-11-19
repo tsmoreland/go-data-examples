@@ -66,7 +66,7 @@ func main() {
 	entities.PrintNames(employees)
 
 	appointmentSummary, err := examples.NextAppointmentForEmployee(db, "Bruce", "Wayne")
-	if err != nil {
+	if err == nil {
 		fmt.Printf("%v %v: %v - %v at %v",
 			appointmentSummary.FirstName,
 			appointmentSummary.LastName,
@@ -75,4 +75,13 @@ func main() {
 			appointmentSummary.StartTime)
 	}
 
+	appointmentSummary, err = examples.NextAppointmentForEmployeeUsingRows(db, "Bruce", "Wayne")
+	if err == nil {
+		fmt.Printf("%v %v: %v - %v at %v",
+			appointmentSummary.FirstName,
+			appointmentSummary.LastName,
+			appointmentSummary.CalendarName,
+			appointmentSummary.Title,
+			appointmentSummary.StartTime)
+	}
 }

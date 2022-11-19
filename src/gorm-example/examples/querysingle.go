@@ -42,7 +42,6 @@ func LastEmployeeIncludingAppointments(db *gorm.DB) *entities.Employee {
 }
 
 func NextAppointmentForEmployee(db *gorm.DB, firstName string, lastName string) (*projections.AppointmentSummary, error) {
-
 	var summaries []projections.AppointmentSummary
 
 	db.
@@ -60,4 +59,28 @@ func NextAppointmentForEmployee(db *gorm.DB, firstName string, lastName string) 
 	} else {
 		return nil, fmt.Errorf("employee not found")
 	}
+}
+
+func NextAppointmentForEmployeeUsingRows(db *gorm.DB, firstName string, lastName string) (*projections.AppointmentSummary, error) {
+
+	rows, err := db.
+		Debug().
+		Model(&entities.Employee{}).
+		Joins("inner join calendars on calendars.employee_id").
+		Joins("inner join appointments on appointments.calendar_id").
+		Where("employees.first_name = ? and employees.last_name = ?", firstName, lastName).
+		Select("employees.first_name, employees.last_name, calendars.name, appointments.title, appointments.start_time").
+		Rows()
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		var summary projections.AppointmentSummary
+
+		rows.Scan(&summary.FirstName, &summary.LastName, &summary.CalendarName, &summary.Title, &summary.StartTime)
+		return &summary, nil
+	}
+
+	return nil, fmt.Errorf("employee not found")
 }
