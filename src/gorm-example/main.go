@@ -76,12 +76,21 @@ func main() {
 	}
 
 	appointmentSummary, err = examples.NextAppointmentForEmployeeUsingRows(db, "Bruce", "Wayne")
-	if err == nil {
-		fmt.Printf("%v %v: %v - %v at %v",
-			appointmentSummary.FirstName,
-			appointmentSummary.LastName,
-			appointmentSummary.CalendarName,
-			appointmentSummary.Title,
-			appointmentSummary.StartTime)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("%v %v: %v - %v at %v\n",
+		appointmentSummary.FirstName,
+		appointmentSummary.LastName,
+		appointmentSummary.CalendarName,
+		appointmentSummary.Title,
+		appointmentSummary.StartTime)
+
+	countByName, err := examples.GetTotalAppointmentLengthByCalendarName(db)
+	if err != nil {
+		panic(err)
+	}
+	for key, value := range *countByName {
+		fmt.Printf("%v: %v\n", key, value)
 	}
 }

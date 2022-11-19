@@ -84,3 +84,27 @@ func NextAppointmentForEmployeeUsingRows(db *gorm.DB, firstName string, lastName
 
 	return nil, fmt.Errorf("employee not found")
 }
+
+func GetTotalAppointmentLengthByCalendarName(db *gorm.DB) (*map[string]int, error) {
+	rows, err := db.
+		Debug().
+		Model(&entities.Appointment{}).
+		Select("calendar_id, name, sum(length) as total_length").
+		Group("calendar_id").
+		Rows()
+	if err != nil {
+		return nil, err
+	}
+
+	countByName := make(map[string]int)
+	for rows.Next() {
+		var id int
+		var length int
+		var name string
+
+		rows.Scan(&id, &name, &length)
+		countByName[name] += length
+	}
+
+	return &countByName, nil
+}
