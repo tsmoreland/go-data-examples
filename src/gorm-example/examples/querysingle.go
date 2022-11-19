@@ -108,3 +108,28 @@ func GetTotalAppointmentLengthByCalendarName(db *gorm.DB) (*map[string]int, erro
 
 	return &countByName, nil
 }
+
+func GetTotalAppointmentLengthByCalendarNameHavingId(db *gorm.DB, calendarId int) (*map[string]int, error) {
+	rows, err := db.
+		Debug().
+		Model(&entities.Appointment{}).
+		Select("calendar_id, name, sum(length) as total_length").
+		Group("calendar_id").
+		Having("calendar_id = ?", calendarId).
+		Rows()
+	if err != nil {
+		return nil, err
+	}
+
+	countByName := make(map[string]int)
+	for rows.Next() {
+		var id int
+		var length int
+		var name string
+
+		rows.Scan(&id, &name, &length)
+		countByName[name] += length
+	}
+
+	return &countByName, nil
+}
