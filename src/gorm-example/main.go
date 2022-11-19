@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/jinzhu/gorm"
 	_ "github.com/lib/pq"
 	"github.com/tsmoreland/go-data-examples/src/gormexample/entities"
@@ -63,4 +64,15 @@ func main() {
 
 	employees = examples.GetPagedEmployees(db, 2, 2)
 	entities.PrintNames(employees)
+
+	appointmentSummary, err := examples.NextAppointmentForEmployee(db, "Bruce", "Wayne")
+	if err != nil {
+		fmt.Printf("%v %v: %v - %v at %v",
+			appointmentSummary.FirstName,
+			appointmentSummary.LastName,
+			appointmentSummary.CalendarName,
+			appointmentSummary.Title,
+			appointmentSummary.StartTime)
+	}
+
 }
