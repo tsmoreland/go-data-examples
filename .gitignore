@@ -26,3 +26,6 @@ settings.json
 
 # log files
 *.log
+
+# SQLite Databases
+*.db
