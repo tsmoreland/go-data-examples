@@ -1,7 +1,7 @@
 package domain
 
 type Employee struct {
-	Id          uint
+	Id          int64
 	FirstName   string
 	LastName    string
 	IsDeveloper bool
@@ -9,7 +9,7 @@ type Employee struct {
 }
 
 type Department struct {
-	Id        uint
+	Id        int64
 	Name      string
 	Employees []Employee
 }
