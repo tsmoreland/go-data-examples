@@ -34,8 +34,8 @@ func (r *SqliteRepository) Migrate() error {
 	query := `
 	CREATE TABLE IF NOT EXISTS Department (
 	   id INT AUTO_INCREMENT PRIMARY KEY,
-	   name varchar(50),
-	)
+	   name varchar(50)
+	);
 	`
 	_, err := r.db.Exec(query)
 	if err != nil {
@@ -52,7 +52,7 @@ func (r *SqliteRepository) Migrate() error {
 	    CONSTRAINT fk_departments
 	    	FOREIGN KEY (department_id)
 	    	REFERENCES departments(department_id)
-	)`
+	);`
 	_, err = r.db.Exec(query)
 	if err != nil {
 		return err
