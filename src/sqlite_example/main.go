@@ -16,4 +16,8 @@ func main() {
 		panic(err)
 	}
 
+	if err := r.SeedData(); err != nil {
+		panic(err)
+	}
+
 }
