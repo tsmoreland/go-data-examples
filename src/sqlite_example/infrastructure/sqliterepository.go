@@ -61,14 +61,23 @@ func (r *SqliteRepository) Migrate() error {
 	return nil
 }
 
+// SeedData adds initial data for the app to test with
+func (r *SqliteRepository) SeedData() error {
+	return shared.ErrNotImplemented
+}
+
+// Close closes the underlying connection to the database
 func (r *SqliteRepository) Close() error {
 	return r.db.Close()
 }
 
+// Employees returns an instance of EmployeeRepository
 func (r *SqliteRepository) Employees() domain.EmployeeRepository {
 	return r
 }
-func (r *SqliteRepository) Departments() domain.DepartmentsRepository {
+
+// Departments returns an instance of DepartmentRepository
+func (r *SqliteRepository) Departments() domain.DepartmentRepository {
 	return r
 }
 

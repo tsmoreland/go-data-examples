@@ -2,10 +2,11 @@ package domain
 
 type Repository interface {
 	Migrate() error
+	SeedData() error
 	Close() error
 
 	Employees() EmployeeRepository
-	Departments() DepartmentsRepository
+	Departments() DepartmentRepository
 }
 
 type EmployeeRepository interface {
@@ -15,7 +16,7 @@ type EmployeeRepository interface {
 	UpdateEmployee(employee Employee) error
 	DeleteEmployee(employee Employee) error
 }
-type DepartmentsRepository interface {
+type DepartmentRepository interface {
 	CreateDepartment(department Department) (*Department, error)
 	FindDepartmentById(id int) (*Department, error)
 	FindAllDepartments(pageNumber int, pageSize int, includeEmployees bool) ([]Department, error)
