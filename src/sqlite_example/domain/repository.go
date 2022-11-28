@@ -5,20 +5,20 @@ type Repository interface {
 	Close() error
 
 	Employees() EmployeeRepository
-	Departments() EmployeeRepository
+	Departments() DepartmentsRepository
 }
 
 type EmployeeRepository interface {
-	Create(employee Employee) (*Employee, error)
-	FindById(id int) (*Employee, error)
-	FindAll(pageNumber int, pageSize int) ([]Employee, error)
-	Update(employee Employee) error
-	Delete(employee Employee) error
+	CreateEmployee(employee Employee) (*Employee, error)
+	FindEmployeeById(id int) (*Employee, error)
+	FindAllEmployees(pageNumber int, pageSize int) ([]Employee, error)
+	UpdateEmployee(employee Employee) error
+	DeleteEmployee(employee Employee) error
 }
-type DepartmentRepository interface {
-	Create(department Department) (*Department, error)
-	FindById(id int) (*Department, error)
-	FindAll(pageNumber int, pageSize int) ([]Department, error)
-	Update(department Department) error
-	Delete(department Department) error
+type DepartmentsRepository interface {
+	CreateDepartment(department Department) (*Department, error)
+	FindDepartmentById(id int) (*Department, error)
+	FindAllDepartments(pageNumber int, pageSize int, includeEmployees bool) ([]Department, error)
+	UpdateDepartment(department Department) error
+	DeleteDepartment(department Department) error
 }
