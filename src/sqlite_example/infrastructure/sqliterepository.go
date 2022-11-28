@@ -88,7 +88,7 @@ func (r *SqliteRepository) CreateEmployee(employee domain.Employee) (*domain.Emp
 		isDeveloper = 1
 	}
 
-	res, err := r.db.Exec(command, employee.FirstName, employee.LastName, isDeveloper, employee.Department.Id)
+	res, err := r.db.Exec(command, employee.FirstName, employee.LastName, isDeveloper, employee.DepartmentId)
 	if err != nil {
 		var sqliteErr sqlite3.Error
 		if errors.As(err, &sqliteErr) && errors.Is(sqliteErr.ExtendedCode, sqlite3.ErrConstraintUnique) {
@@ -118,10 +118,83 @@ func (r *SqliteRepository) DeleteEmployee(employee domain.Employee) error {
 }
 
 func (r *SqliteRepository) CreateDepartment(department domain.Department) (*domain.Department, error) {
-	return nil, shared.ErrNotImplemented
+	command := "INSERT INTO Departments (name) VALUES (?)"
+
+	res, err := r.db.Exec(command, department.Name)
+	if err != nil {
+		var sqliteErr sqlite3.Error
+		if errors.As(err, &sqliteErr) && errors.Is(sqliteErr.ExtendedCode, sqlite3.ErrConstraintUnique) {
+			return nil, shared.ErrDuplicate
+		}
+	}
+	id, err := res.LastInsertId()
+	if err != nil {
+		return nil, err
+	}
+
+	department.Id = id
+
+	if department.Employees == nil {
+		department.Employees = make([]domain.Employee, 0)
+	}
+
+	var employees []domain.Employee
+	for _, employee := range department.Employees {
+
+		// TODO: wrap this in a transaction - either all employees are added or none are
+		employee.DepartmentId = department.Id
+		newEmployee, err := r.CreateEmployee(employee)
+		if err == nil {
+			employees = append(employees, *newEmployee)
+			continue
+		}
+		if err = r.DeleteDepartment(department); err != nil {
+			return nil, err
+		}
+	}
+
+	return &department, nil
 }
 func (r *SqliteRepository) FindDepartmentById(id int) (*domain.Department, error) {
-	return nil, shared.ErrNotImplemented
+	query := "SELECT * FROM Departments WHERE id = ?"
+
+	row := r.db.QueryRow(query, id)
+	var department domain.Department
+	if err := row.Scan(&department.Id, &department.Name); err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, shared.ErrNotFound
+		}
+		return nil, err
+	}
+
+	// TODO:
+	// add a method that can be used to scan the rows for employees to be used here and by
+	// find all employees
+	query = "SELECT * from Employees WHERE department_id = ?"
+	rows, err := r.db.Query(query, department.Id)
+	if err != nil {
+		return nil, err
+	}
+	defer shared.CloseWithErrorReporting(rows)
+
+	var employees []domain.Employee
+	for rows.Next() {
+		var employee domain.Employee
+		var isDeveloper int
+		if err := rows.Scan(&employee.Id, &employee.FirstName, &employee.LastName, isDeveloper, &employee.DepartmentId); err != nil {
+			return nil, err
+		}
+		if isDeveloper != 0 {
+			employee.IsDeveloper = true
+		} else {
+			employee.IsDeveloper = false
+		}
+		employee.Department = &department
+		employees = append(employees, employee)
+	}
+
+	department.Employees = employees
+	return &department, nil
 }
 func (r *SqliteRepository) FindAllDepartments(pageNumber int, pageSize int, includeEmployees bool) ([]domain.Department, error) {
 	return nil, shared.ErrNotImplemented
