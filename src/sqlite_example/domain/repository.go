@@ -18,7 +18,7 @@ type EmployeeRepository interface {
 }
 type DepartmentRepository interface {
 	CreateDepartment(department Department) (*Department, error)
-	FindDepartmentById(id int) (*Department, error)
+	FindDepartmentById(id int, includeEmployees bool) (*Department, error)
 	FindAllDepartments(pageNumber int, pageSize int, includeEmployees bool) ([]Department, error)
 	UpdateDepartment(department Department) error
 	DeleteDepartment(department Department) error
