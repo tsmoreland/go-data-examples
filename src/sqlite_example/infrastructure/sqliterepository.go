@@ -34,7 +34,7 @@ func NewSqliteRepository(filename string) (domain.Repository, error) {
 func (r *SqliteRepository) Migrate() error {
 	query := `
 	CREATE TABLE IF NOT EXISTS Departments (
-	   id INT AUTO_INCREMENT PRIMARY KEY,
+	   id INTEGER PRIMARY KEY AUTOINCREMENT,
 	   name varchar(50)
 	);
 	`
@@ -45,7 +45,7 @@ func (r *SqliteRepository) Migrate() error {
 
 	query = `
 	CREATE TABLE IF NOT EXISTS Employees (
-		id INT AUTO_INCREMENT PRIMARY KEY,
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
 	  	first_name varchar(100),
 	  	last_name varchar(100),
 	    is_developer int,
@@ -116,7 +116,7 @@ func (r *SqliteRepository) Departments() domain.DepartmentRepository {
 }
 
 func (r *SqliteRepository) CreateEmployee(employee domain.Employee) (*domain.Employee, error) {
-	command := "INSERT INTO Employees (id, first_name, last_name, is_developer, department_id) VALUES (?, ?, ?, ?)"
+	command := "INSERT INTO Employees (first_name, last_name, is_developer, department_id) VALUES (?, ?, ?, ?)"
 	isDeveloper := 0
 	if employee.IsDeveloper {
 		isDeveloper = 1
