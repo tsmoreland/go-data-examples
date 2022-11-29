@@ -33,7 +33,7 @@ func NewSqliteRepository(filename string) (domain.Repository, error) {
 //goland:noinspection ALL
 func (r *SqliteRepository) Migrate() error {
 	query := `
-	CREATE TABLE IF NOT EXISTS Department (
+	CREATE TABLE IF NOT EXISTS Departments (
 	   id INT AUTO_INCREMENT PRIMARY KEY,
 	   name varchar(50)
 	);
@@ -64,7 +64,40 @@ func (r *SqliteRepository) Migrate() error {
 
 // SeedData adds initial data for the app to test with
 func (r *SqliteRepository) SeedData() error {
-	return shared.ErrNotImplemented
+	departments := []domain.Department{
+		{Id: 1, Name: "Finance"},
+		{Id: 2, Name: "Legal"},
+		{Id: 3, Name: "Marketing"},
+		{Id: 4, Name: "HR"},
+		{Id: 5, Name: "IT"},
+		{Id: 6, Name: "R&D"},
+	}
+	for _, entity := range departments {
+		if _, err := r.CreateDepartment(entity); err != nil {
+			return err
+		}
+	}
+
+	employees := []domain.Employee{
+		{Id: 1, FirstName: "John", LastName: "Smith", IsDeveloper: false, DepartmentId: 1},
+		{Id: 2, FirstName: "Jessica", LastName: "Jones", IsDeveloper: true, DepartmentId: 5},
+		{Id: 3, FirstName: "Tony", LastName: "Stark", IsDeveloper: true, DepartmentId: 6},
+		{Id: 4, FirstName: "Edward", LastName: "Nigma", IsDeveloper: false, DepartmentId: 1},
+		{Id: 5, FirstName: "Brenda", LastName: "Moore", IsDeveloper: false, DepartmentId: 4},
+		{Id: 6, FirstName: "Bruce", LastName: "Wayne", IsDeveloper: true, DepartmentId: 6},
+		{Id: 7, FirstName: "Bruce", LastName: "Banner", IsDeveloper: true, DepartmentId: 6},
+		{Id: 8, FirstName: "Harley", LastName: "Quinn", IsDeveloper: false, DepartmentId: 4},
+		{Id: 9, FirstName: "Victor", LastName: "Fries", IsDeveloper: false, DepartmentId: 6},
+		{Id: 10, FirstName: "Harvey", LastName: "Dent", IsDeveloper: false, DepartmentId: 2},
+	}
+
+	for _, entity := range employees {
+		if _, err := r.CreateEmployee(entity); err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 // Close closes the underlying connection to the database
