@@ -146,6 +146,36 @@ func (r *SqliteRepository) FindAllEmployees(pageNumber int, pageSize int) ([]dom
 	if pageNumber < 1 || pageSize < 1 {
 		return nil, shared.ErrInvalidArgument
 	}
+
+	query := `
+select
+  *
+from
+  Employees
+  inner join Departments on Employees.department_id = Departments.id
+order by 
+  last_name
+limit 
+  ? 
+offset 
+  ?
+`
+	rows, err := r.db.Query(query, pageSize, (pageNumber-1)*pageSize)
+	if err != nil {
+		return nil, err
+	}
+	defer shared.CloseWithErrorReporting(rows)
+
+	var employees []domain.Employee
+	for rows.Next() {
+		employee, err := readEmployeeWithEmbeddedDepartment(rows)
+		if err != nil {
+			return nil, err
+		}
+		employees = append(employees, *employee)
+	}
+	return employees, nil
+
 	return nil, shared.ErrNotImplemented
 }
 
