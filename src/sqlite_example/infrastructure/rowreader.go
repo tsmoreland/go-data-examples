@@ -50,6 +50,12 @@ func readEmployeeWithEmbeddedDepartment(rows scanner) (*domain.Employee, error) 
 	if err := rows.Scan(&emp.Id, &emp.FirstName, &emp.LastName, &isDeveloper, &emp.DepartmentId, &departmentId, &department.Name); err != nil {
 		return nil, translate(err)
 	}
+	if isDeveloper != 0 {
+		emp.IsDeveloper = true
+	} else {
+		emp.IsDeveloper = false
+	}
+
 	department.Id = emp.DepartmentId
 	emp.Department = &department
 	return &emp, nil
