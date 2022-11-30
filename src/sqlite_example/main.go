@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/tsmoreland/go-data-examplessqlite_example/infrastructure"
 	"github.com/tsmoreland/go-data-examplessqlite_example/shared"
 )
@@ -20,4 +21,12 @@ func main() {
 		panic(err)
 	}
 
+	employees, err := r.Employees().FindAllEmployees(1, 4)
+	if err != nil {
+		panic(err)
+	}
+
+	for _, emp := range employees {
+		fmt.Printf("%v\n", emp)
+	}
 }
