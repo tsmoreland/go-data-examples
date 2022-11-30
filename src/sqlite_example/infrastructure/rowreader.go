@@ -42,3 +42,15 @@ func readDepartment(rows scanner) (*domain.Department, error) {
 	}
 	return &department, nil
 }
+func readEmployeeWithEmbeddedDepartment(rows scanner) (*domain.Employee, error) {
+	var emp domain.Employee
+	var department domain.Department
+	var isDeveloper int
+	var departmentId int64
+	if err := rows.Scan(&emp.Id, &emp.FirstName, &emp.LastName, &isDeveloper, &emp.DepartmentId, &departmentId, &department.Name); err != nil {
+		return nil, translate(err)
+	}
+	department.Id = emp.DepartmentId
+	emp.Department = &department
+	return &emp, nil
+}
