@@ -175,8 +175,6 @@ offset
 		employees = append(employees, *employee)
 	}
 	return employees, nil
-
-	return nil, shared.ErrNotImplemented
 }
 
 func (r *SqliteRepository) FindAllEmployeesInDepartment(department *domain.Department, pageNumber int, pageSize int) ([]domain.Employee, error) {
@@ -225,8 +223,20 @@ func (r *SqliteRepository) UpdateEmployee(employee domain.Employee) error {
 	return shared.ErrNotImplemented
 }
 func (r *SqliteRepository) DeleteEmployee(employee domain.Employee) error {
-	_ = employee
-	return shared.ErrNotImplemented
+	res, err := r.db.Exec("DELETE FROM Employees WHERE id = ?", employee.Id)
+	if err != nil {
+		return translate(err)
+	}
+
+	rowsAffected, err := res.RowsAffected()
+	if err != nil {
+		return translate(err)
+	}
+
+	if rowsAffected == 0 {
+		return shared.ErrDeleteFailed
+	}
+	return nil
 }
 
 func (r *SqliteRepository) CreateDepartment(department domain.Department) (*domain.Department, error) {
