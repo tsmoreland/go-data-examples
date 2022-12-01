@@ -138,7 +138,7 @@ func (r *SqliteRepository) CreateEmployee(employee domain.Employee) (*domain.Emp
 
 	return &employee, nil
 }
-func (r *SqliteRepository) FindEmployeeById(id int) (*domain.Employee, error) {
+func (r *SqliteRepository) FindEmployeeById(id int64) (*domain.Employee, error) {
 	_ = id
 	return nil, shared.ErrNotImplemented
 }
@@ -205,7 +205,7 @@ func (r *SqliteRepository) FindAllEmployeesInDepartment(department *domain.Depar
 	return employees, nil
 }
 
-func (r *SqliteRepository) FindAllEmployeesWithDepartmentId(departmentId int, pageNumber int, pageSize int) ([]domain.Employee, error) {
+func (r *SqliteRepository) FindAllEmployeesWithDepartmentId(departmentId int64, pageNumber int, pageSize int) ([]domain.Employee, error) {
 	department, err := r.FindDepartmentById(departmentId, false)
 	if err != nil {
 		return nil, translate(err)
@@ -222,7 +222,38 @@ func (r *SqliteRepository) UpsertEmployee(employee domain.Employee) (*domain.Emp
 	if employee.Id == 0 {
 		return r.CreateEmployee(employee)
 	}
-	return nil, shared.ErrNotImplemented
+
+	var isDeveloper int
+	if employee.IsDeveloper {
+		isDeveloper = 1
+	} else {
+		isDeveloper = 0
+	}
+
+	command := `
+UPDATE Employees SET 
+  first_name = ?, 
+  last_name = ?, 
+  is_developer = ?, 
+  department_id = ?
+WHERE 
+  id = ?
+`
+
+	res, err := r.db.Exec(command, employee.FirstName, employee.LastName, isDeveloper, employee.DepartmentId, employee.Id)
+	if err != nil {
+		return nil, translate(err)
+	}
+
+	rowsAffected, err := res.RowsAffected()
+	if err != nil {
+		return nil, translate(err)
+	}
+	if rowsAffected == 0 {
+		return nil, shared.ErrNotFound
+	}
+
+	return r.FindEmployeeById(employee.Id)
 }
 func (r *SqliteRepository) DeleteEmployee(employee domain.Employee) error {
 	res, err := r.db.Exec("DELETE FROM Employees WHERE id = ?", employee.Id)
@@ -276,7 +307,7 @@ func (r *SqliteRepository) CreateDepartment(department domain.Department) (*doma
 
 	return &department, nil
 }
-func (r *SqliteRepository) FindDepartmentById(id int, includeEmployees bool) (*domain.Department, error) {
+func (r *SqliteRepository) FindDepartmentById(id int64, includeEmployees bool) (*domain.Department, error) {
 	query := "SELECT * FROM Departments WHERE id = ?"
 
 	row := r.db.QueryRow(query, id)
