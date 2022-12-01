@@ -218,9 +218,11 @@ func (r *SqliteRepository) FindAllEmployeesWithDepartmentId(departmentId int, pa
 	return employees, nil
 }
 
-func (r *SqliteRepository) UpdateEmployee(employee domain.Employee) error {
-	_ = employee
-	return shared.ErrNotImplemented
+func (r *SqliteRepository) UpsertEmployee(employee domain.Employee) (*domain.Employee, error) {
+	if employee.Id == 0 {
+		return r.CreateEmployee(employee)
+	}
+	return nil, shared.ErrNotImplemented
 }
 func (r *SqliteRepository) DeleteEmployee(employee domain.Employee) error {
 	res, err := r.db.Exec("DELETE FROM Employees WHERE id = ?", employee.Id)
@@ -303,9 +305,12 @@ func (r *SqliteRepository) FindAllDepartments(pageNumber int, pageSize int, incl
 	_ = includeEmployees
 	return nil, shared.ErrNotImplemented
 }
-func (r *SqliteRepository) UpdateDepartment(department domain.Department) error {
-	_ = department
-	return shared.ErrNotImplemented
+func (r *SqliteRepository) UpsertDepartment(department domain.Department) (*domain.Department, error) {
+	if department.Id == 0 {
+		return r.CreateDepartment(department)
+	}
+
+	return nil, shared.ErrNotImplemented
 }
 func (r *SqliteRepository) DeleteDepartment(department domain.Department) error {
 	_ = department
