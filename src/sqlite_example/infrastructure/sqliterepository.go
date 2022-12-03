@@ -1,6 +1,7 @@
 package infrastructure
 
 import (
+	"context"
 	"database/sql"
 	"errors"
 	"github.com/mattn/go-sqlite3"
@@ -115,14 +116,22 @@ func (r *SqliteRepository) Departments() domain.DepartmentRepository {
 	return r
 }
 
+type dbExecutor interface {
+	Exec(query string, args ...any) (sql.Result, error)
+}
+
 func (r *SqliteRepository) CreateEmployee(employee domain.Employee) (*domain.Employee, error) {
+	return createEmployeeUsingDbExecutor(r.db, employee)
+}
+
+func createEmployeeUsingDbExecutor(executor dbExecutor, employee domain.Employee) (*domain.Employee, error) {
 	command := "INSERT INTO Employees (first_name, last_name, is_developer, department_id) VALUES (?, ?, ?, ?)"
 	isDeveloper := 0
 	if employee.IsDeveloper {
 		isDeveloper = 1
 	}
 
-	res, err := r.db.Exec(command, employee.FirstName, employee.LastName, isDeveloper, employee.DepartmentId)
+	res, err := executor.Exec(command, employee.FirstName, employee.LastName, isDeveloper, employee.DepartmentId)
 	if err != nil {
 		var sqliteErr sqlite3.Error
 		if errors.As(err, &sqliteErr) && errors.Is(sqliteErr.ExtendedCode, sqlite3.ErrConstraintUnique) {
@@ -138,6 +147,7 @@ func (r *SqliteRepository) CreateEmployee(employee domain.Employee) (*domain.Emp
 
 	return &employee, nil
 }
+
 func (r *SqliteRepository) FindEmployeeById(id int64) (*domain.Employee, error) {
 	_ = id
 	return nil, shared.ErrNotImplemented
@@ -290,12 +300,16 @@ func (r *SqliteRepository) CreateDepartment(department domain.Department) (*doma
 		department.Employees = make([]domain.Employee, 0)
 	}
 
+	tx, err := r.db.BeginTx(context.Background(), nil)
+	if err != nil {
+		return nil, translate(err)
+	}
+
 	var employees []domain.Employee
 	for _, employee := range department.Employees {
 
-		// TODO: wrap this in a transaction - either all employees are added or none are
 		employee.DepartmentId = department.Id
-		newEmployee, err := r.CreateEmployee(employee)
+		newEmployee, err := createEmployeeUsingDbExecutor(tx, employee)
 		if err == nil {
 			employees = append(employees, *newEmployee)
 			continue
@@ -303,6 +317,10 @@ func (r *SqliteRepository) CreateDepartment(department domain.Department) (*doma
 		if err = r.DeleteDepartment(department); err != nil {
 			return nil, err
 		}
+	}
+
+	if err := tx.Commit(); err != nil {
+		return nil, translate(err)
 	}
 
 	return &department, nil
