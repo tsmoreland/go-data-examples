@@ -351,8 +351,34 @@ func (r *SqliteRepository) FindAllDepartments(pageNumber int, pageSize int, incl
 	if pageNumber < 1 || pageSize < 1 {
 		return nil, shared.ErrInvalidArgument
 	}
-	_ = includeEmployees
-	return nil, shared.ErrNotImplemented
+
+	query := "SELECT * FROM Departments"
+	rows, err := r.db.Query(query)
+	if err != nil {
+		return nil, translate(err)
+	}
+	defer shared.CloseWithErrorReporting(rows)
+
+	var departments []domain.Department
+	for rows.Next() {
+		department, err := readDepartment(rows)
+		if err != nil {
+			return nil, translate(err)
+		}
+		departments = append(departments, *department)
+		// first pass; better solution is to get all employees and add them to a map of departments to employees - since
+		// every employee has to have an apartment, means 2 overall queries rather than 1 + n where n
+		// is the number of departments
+		if includeEmployees {
+			employees, err := r.FindAllEmployeesInDepartment(department, 1, math.MaxInt)
+			if err != nil {
+				return nil, translate(err)
+			}
+			department.Employees = employees
+		}
+	}
+
+	return departments, nil
 }
 func (r *SqliteRepository) UpsertDepartment(department domain.Department) (*domain.Department, error) {
 	if department.Id == 0 {
