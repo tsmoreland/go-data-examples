@@ -187,6 +187,24 @@ offset
 	return employees, nil
 }
 
+func (r *SqliteRepository) findAllEmployeesExcludingDepartment(pageNumber int, pageSize int) ([]domain.Employee, error) {
+	query := "SELECT * FROM Employees"
+	rows, err := r.db.Query(query, pageSize, (pageNumber-1)*pageSize)
+	if err != nil {
+		return nil, err
+	}
+	defer shared.CloseWithErrorReporting(rows)
+	var employees []domain.Employee
+	for rows.Next() {
+		employee, err := readEmployeeWithoutEmbeddedDepartment(rows)
+		if err != nil {
+			return nil, err
+		}
+		employees = append(employees, *employee)
+	}
+	return employees, nil
+}
+
 func (r *SqliteRepository) FindAllEmployeesInDepartment(department *domain.Department, pageNumber int, pageSize int) ([]domain.Employee, error) {
 	var query string
 
@@ -359,23 +377,37 @@ func (r *SqliteRepository) FindAllDepartments(pageNumber int, pageSize int, incl
 	}
 	defer shared.CloseWithErrorReporting(rows)
 
-	var departments []domain.Department
+	var departmentsById map[int64]*domain.Department
+	var employeesByDepartmentId map[int64][]domain.Employee
 	for rows.Next() {
 		department, err := readDepartment(rows)
 		if err != nil {
 			return nil, translate(err)
 		}
-		departments = append(departments, *department)
-		// first pass; better solution is to get all employees and add them to a map of departments to employees - since
-		// every employee has to have an apartment, means 2 overall queries rather than 1 + n where n
-		// is the number of departments
-		if includeEmployees {
-			employees, err := r.FindAllEmployeesInDepartment(department, 1, math.MaxInt)
-			if err != nil {
-				return nil, translate(err)
-			}
-			department.Employees = employees
+
+		departmentsById[department.Id] = department
+		employeesByDepartmentId[department.Id] = make([]domain.Employee, 0)
+	}
+
+	if includeEmployees {
+		employees, err := r.findAllEmployeesExcludingDepartment(1, math.MaxInt64)
+		if err != nil {
+			return nil, translate(err)
 		}
+		for _, emp := range employees {
+			// second pass: not ensuring departmentId is present
+			emp.Department = departmentsById[emp.DepartmentId]
+			employeesByDepartmentId[emp.DepartmentId] = append(employeesByDepartmentId[emp.DepartmentId], emp)
+		}
+		for departmentId, employees := range employeesByDepartmentId {
+			departmentsById[departmentId].Employees = employees
+		}
+
+	}
+
+	var departments []domain.Department
+	for _, department := range departmentsById {
+		departments = append(departments, *department)
 	}
 
 	return departments, nil

@@ -43,6 +43,17 @@ func readDepartment(rows scanner) (*domain.Department, error) {
 	return &department, nil
 }
 func readEmployeeWithEmbeddedDepartment(rows scanner) (*domain.Employee, error) {
+	emp, err := readEmployeeWithoutEmbeddedDepartment(rows)
+	if err != nil {
+		return nil, translate(err)
+	}
+
+	var department domain.Department
+	department.Id = emp.DepartmentId
+	emp.Department = &department
+	return emp, nil
+}
+func readEmployeeWithoutEmbeddedDepartment(rows scanner) (*domain.Employee, error) {
 	var emp domain.Employee
 	var department domain.Department
 	var isDeveloper int
@@ -56,7 +67,5 @@ func readEmployeeWithEmbeddedDepartment(rows scanner) (*domain.Employee, error) 
 		emp.IsDeveloper = false
 	}
 
-	department.Id = emp.DepartmentId
-	emp.Department = &department
 	return &emp, nil
 }
