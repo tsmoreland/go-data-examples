@@ -421,5 +421,23 @@ func (r *SqliteRepository) UpsertDepartment(department domain.Department) (*doma
 }
 func (r *SqliteRepository) DeleteDepartment(department domain.Department) error {
 	_ = department
-	return shared.ErrNotImplemented
+
+	tx, err := r.db.BeginTx(context.Background(), nil)
+	if err != nil {
+		return translate(err)
+	}
+
+	deleteChildren := "DELETE FROM Employees WHERE department_id = ?"
+	if _, err := tx.Exec(deleteChildren, department.Id); err != nil {
+		return translate(err)
+	}
+	deleteCommand := "DELETE FROM Departments WHERE id = ?"
+	if _, err := tx.Exec(deleteCommand, department.Id); err != nil {
+		return translate(err)
+	}
+
+	if err := tx.Commit(); err != nil {
+		return translate(err)
+	}
+	return nil
 }
