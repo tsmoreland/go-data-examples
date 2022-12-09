@@ -29,4 +29,12 @@ func main() {
 	for _, emp := range employees {
 		fmt.Printf("%v\n", emp)
 	}
+
+	employee, err := r.Employees().FindEmployeeById(1)
+	if err != nil {
+		panic(err)
+	}
+	if err := r.Employees().DeleteEmployee(*employee); err != nil {
+		panic(err)
+	}
 }
