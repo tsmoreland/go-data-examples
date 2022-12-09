@@ -14,3 +14,10 @@ func DeleteById(db *sql.DB, id int64) (int64, error) {
 		return affected, nil
 	}
 }
+
+func DeleteAll(db *sql.DB) error {
+	if _, err := db.Exec("DELETE FROM People"); err != nil {
+		return err
+	}
+	return nil
+}

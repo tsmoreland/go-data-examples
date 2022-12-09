@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/go-sql-driver/mysql"
 	"github.com/tsmoreland/go-data-examples/mysql_example/configuration"
+	"github.com/tsmoreland/go-data-examples/mysql_example/crud"
 	"log"
 )
 
@@ -47,6 +48,12 @@ func main() {
 
 	// for use with transactions
 	//ctx := context.Background()
-
 	fmt.Println("Connected")
+
+	if err := crud.DeleteAll(db); err != nil {
+		panic(err)
+	}
+	if err := crud.SeedData(db); err != nil {
+		panic(err)
+	}
 }
