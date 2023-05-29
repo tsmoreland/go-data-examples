@@ -1,6 +1,6 @@
 module github.com/tsmoreland/go-data-examples/src/gormexample
 
-go 1.19
+go 1.20
 
 require (
 	github.com/jinzhu/gorm v1.9.16
